@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/* 
+Verb	    URI	                    Action	    Route Name
+GET	        /photos	                index	    photos.index
+GET	        /photos/create	        create	    photos.create
+POST	    /photos	                store	    photos.store
+GET	        /photos/{photo}	        show	    photos.show
+GET	        /photos/{photo}/edit	edit	    photos.edit
+PUT/PATCH	/photos/{photo}	        update	    photos.update 
+*/
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -20,6 +31,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function(){
     return view('main');
 });
+
+Route::get('/login', [LoginController::class, 'index'])->name('login');;
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
