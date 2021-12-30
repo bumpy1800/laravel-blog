@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('user_header')
+@section('login_header')
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -18,7 +18,8 @@
             <p class="mb-5 text-3xl uppercase text-gray-600">Login</p>
             <input type="email" name="email" class="mb-5 p-3 w-80 focus:border-purple-700 rounded border-2 outline-none" autocomplete="off" placeholder="Email" required>
             <input type="password" name="password" class="mb-5 p-3 w-80 focus:border-purple-700 rounded border-2 outline-none" autocomplete="off" placeholder="Password" required>
-            <button class="bg-purple-600 hover:bg-purple-900 text-white font-bold p-2 rounded w-80" id="login" type="submit"><span>Login</span></button>
+            <button class="bg-purple-600 hover:bg-purple-900 text-white font-bold p-2 rounded w-80 m-2" id="login" type="submit"><span>로그인</span></button>
+            <button class="bg-violet-600 hover:bg-violet-900 text-white font-bold p-2 rounded w-80 m-2" id="register" type="button" onclick="location.href='{{ route('register') }}'"><span>회원가입</span></button>
         </form>
 
 @endsection
