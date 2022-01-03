@@ -8,6 +8,9 @@
             @case('register')
                 @yield('register_header')
                 @break
+            @case('congratulations')
+                @yield('congratulations_header')        
+                @break
             @default
                 
         @endswitch
@@ -22,7 +25,10 @@
                     @break
                 @case('register')
                     @yield('register_content')
-                    @break            
+                    @break  
+                @case('congratulations')
+                    @yield('congratulations_content')        
+                    @break          
                 @default
                     
             @endswitch

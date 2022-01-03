@@ -30,10 +30,11 @@ PUT/PATCH	/photos/{photo}	        update	    photos.update
 
 Route::get('/', function(){
     return view('main');
-});
+})->name('main');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::get('/register', [RegisterController::class, 'index'])->name('register');
+Route::get('/register', [RegisterController::class, 'create'])->name('register');
+Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
