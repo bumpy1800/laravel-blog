@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        {{-- head테그안에 css나 js등 각 회원관련페이지 마다 다르게 적용 --}}
         @switch($path)
             @case('login')
                 @yield('login_header')        

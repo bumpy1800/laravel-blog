@@ -24,6 +24,8 @@ GET	        /photos/{photo}/edit	edit	    photos.edit
 PUT/PATCH	/photos/{photo}	        update	    photos.update 
 */
 
+// Route::resource(['photos' => 'photoController']); 하게되면 위에 처럼 route:list가 적용된다(Route:resource의 활용)
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -32,8 +34,9 @@ Route::get('/', function(){
     return view('main');
 })->name('main');
 
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::get('/register', [RegisterController::class, 'create'])->name('register');
+Route::get('/login', [LoginController::class, 'index'])->name('login.index');
+Route::post('login', [LoginController::class, 'login'])->name('login');
+Route::get('/register/create', [RegisterController::class, 'create'])->name('register.create');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
