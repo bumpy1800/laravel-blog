@@ -28,38 +28,38 @@
                                 @csrf
                                 <div class="mx-auto max-w-lg ">
                                     <div class="py-1">
-                                        <span class="@error('name') px-1 text-sm text-gray-600 @enderror">닉네임</span>
+                                        <span class="px-1 text-sm text-gray-600">닉네임</span>
                                         <input placeholder="" type="text" id="name" name="name"
-                                            class="text-md block px-3 py-2 rounded-lg w-full
+                                            class="@error('name') is-invalid @enderror text-md block px-3 py-2 rounded-lg w-full
                         bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none">
                                     </div>
                                     @error('name')
                                         <div class="alert alert-danger text-red-600">{{ $message }}</div>
                                     @enderror
                                     <div class="py-1">
-                                        <span class="@error('email') px-1 text-sm text-gray-600 @enderror">이메일</span>
+                                        <span class="px-1 text-sm text-gray-600">이메일</span>
                                         <input placeholder="" type="email" id="email" name="email"
-                                            class="text-md block px-3 py-2 rounded-lg w-full
+                                            class=" @error('name') is-invalid @enderror text-md block px-3 py-2 rounded-lg w-full
                         bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none">
                                     </div>
                                     @error('email')
                                         <div class="alert alert-danger text-red-600">{{ $message }}</div>
                                     @enderror
                                     <div class="py-1">
-                                        <span class="@error('password') px-1 text-sm text-gray-600 @enderror">비밀번호</span>
+                                        <span class="px-1 text-sm text-gray-600">비밀번호</span>
                                             <input placeholder="" type="password" x-model="password"
                                                 id="password" name="password"
-                                                class="text-md block px-3 py-2 rounded-lg w-full
+                                                class="@error('name') is-invalid @enderror text-md block px-3 py-2 rounded-lg w-full
                             bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none">
                                         </div>
                                         @error('password')
                                             <div class="alert alert-danger text-red-600">{{ $message }}</div>
                                         @enderror
                                         <div class="py-1">
-                                            <span class="@error('password_confirm') px-1 text-sm text-gray-600 @enderror">비밀번호 확인</span>
+                                            <span class="px-1 text-sm text-gray-600">비밀번호 확인</span>
                                             <input placeholder="" type="password" x-model="password_confirm"
                                                 id="password_confirm" name="password_confirm"
-                                                class="text-md block px-3 py-2 rounded-lg w-full
+                                                class="@error('name') is-invalid @enderror text-md block px-3 py-2 rounded-lg w-full
                             bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none">
                                         </div>
                                         @error('password_confirm')
@@ -105,8 +105,8 @@
                                         </div>
                                         <div class="flex justify-start">
                                             <label class="block text-gray-500 font-bold my-4 flex items-center">
-                                                <input class="leading-loose text-pink-600 top-0" type="checkbox" id="poliy" name="poliy"/>
-                                                <span class="@error('poliy') ml-2 text-sm py-2 text-gray-600 text-left @enderror">사이트의
+                                                <input class=" @error('name') is-invalid @enderror leading-loose text-pink-600 top-0" type="checkbox" id="poliy" name="poliy"/>
+                                                <span class="ml-2 text-sm py-2 text-gray-600 text-left">사이트의
                                                     <a href="#"
                                                         class="font-semibold text-black border-b-2 border-gray-200 hover:border-gray-500">
                                                     이용약관

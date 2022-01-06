@@ -15,13 +15,23 @@
       <h1 class="text-white ml-4 cursor-pointer text-2xl">Laravel-Blog</h1>
     </div>
     <ul class="flex">
-      {{-- <li> 로그인 됬을때 글쓰기 버튼
+    @Auth
+       <li>
         <a class="text-white mr-4 bg-gray-500 pt-4 pb-4 pr-5 pl-5 hover:bg-gray-600 transition-all rounded" href="#" style="
-    "><i class="fas fa-home"></i> 글쓰기</a> --}}
+    ">글쓰기</a>
+    @endauth
+    @if (Auth::check())
+      <li>
+        <a class="text-white mr-4 bg-gray-500 pt-4 pb-4 pr-5 pl-5 hover:bg-gray-600 transition-all rounded" href="{{ route('logout') }}" style="
+      ">로그아웃</a>
+      </li>
+    @else
       <li>
         <a class="text-white mr-4 bg-gray-500 pt-4 pb-4 pr-5 pl-5 hover:bg-gray-600 transition-all rounded" href="{{ route('login.index') }}" style="
-    ">로그인</a>
+      ">로그인</a>
       </li>
+    @endif
+
     </ul>
 
 @endsection

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +35,7 @@ Route::get('/', function(){
 })->name('main');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login.index');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('/register/create', [RegisterController::class, 'create'])->name('register.create');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');

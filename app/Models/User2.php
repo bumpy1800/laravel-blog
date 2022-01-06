@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class User2 extends Model
+class User2 extends Authenticatable
 {
     use HasFactory;
+    use Notifiable;
 
     protected $table = 'user2';
     protected $primaryKey = 'id';
