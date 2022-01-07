@@ -23,5 +23,5 @@ module.exports = {
             fill: ['hover', 'focus'],
           },
       },
-    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'), require('@themesberg/flowbite/plugin')],
 };

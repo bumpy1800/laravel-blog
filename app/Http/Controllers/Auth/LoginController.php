@@ -20,13 +20,15 @@ class LoginController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-        
-        if (Auth::attempt($validatedData)) {
+        //dd($request);
+        $remember = $request->input('remember');
 
-            return redirect()->route('main');
+        if (Auth::attempt($validatedData, $remember)) {
+
+            return redirect()->route('main')->with('success', '로그인 되었습니다 어서오십시요');
         }
         else{
-            return redirect()->back();
+            return redirect()->back()->with('error', '회원정보가 일치하지 않습니다!!');
         }
     }
     public function logout()
