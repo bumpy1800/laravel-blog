@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,6 +40,8 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('/register/create', [RegisterController::class, 'create'])->name('register.create');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+Route::get('/userinfo', [UserController::class, 'index'])->name('userinfo.index');
+Route::post('/userinfo', [UserController::class, 'store'])->name('userinfo.store');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

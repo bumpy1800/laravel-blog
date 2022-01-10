@@ -12,6 +12,9 @@
             @case('congratulations')
                 @yield('congratulations_header')        
                 @break
+            @case('info')
+                @yield('userinfo_header')        
+                @break
             @default
                 
         @endswitch
@@ -29,6 +32,9 @@
                     @break  
                 @case('congratulations')
                     @yield('congratulations_content')        
+                    @break
+                @case('info')
+                    @yield('userinfo_content')        
                     @break          
                 @default
                     
