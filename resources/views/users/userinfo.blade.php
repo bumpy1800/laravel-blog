@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"  />
 
     <title>{{ env('APP_NAME') }}</title>
-
 @endsection
 
 @section('userinfo_content')
@@ -19,8 +18,9 @@
 
         </script>
     @enderror
+    @include('layouts.alert')
+    {{-- @dump() --}}
     <div class="border-b-2 block md:flex w-3/5">
-      @include('layouts.alert')
       <div class="text-center w-2/6 md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
         <div class="flex justify-between">
           <span class="text-xl font-semibold block">회원 정보</span>
@@ -28,14 +28,14 @@
         <form action="{{ route('userinfo.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="w-full p-8 mx-2 flex justify-center">
-        @if (Auth::user()->profile_photo_url)
-            <img id="showImage" class="max-w-xs w-32 items-center border" src="{{ Auth::user()->profile_photo_url }}" alt="">
+        @if (Auth::user()->profile_photo_path)
+            <img id="showImage" class="max-w-xs w-32 items-center border" src="storage/{{ Crypt::decryptString(Auth::user()->profile_photo_path) }}" alt="">
         @else
             <img id="showImage" class="max-w-xs w-32 items-center border" src="{{ asset('storage/default_profile.jpg'); }}" alt="">
         @endif
                                   
         </div>
-        <input type="hidden" name="id" value="{{ Auth::user()->id }}">
+        <input type="hidden" id="id" name="id" value="{{ Auth::user()->id }}">
         <input type="file" id="pic" name="pic" class=" @error('pic') is-invalid @enderror-mt-2 mb-5 text-md font-bold text-white bg-gray-700 rounded-full hover:bg-gray-800">
           <button type="submit" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">사진 수정</button>
         </form>
@@ -57,4 +57,5 @@
       </div>
   
     </div>
+
 @endsection

@@ -1,5 +1,3 @@
-require('./bootstrap');
-
 import Alpine from 'alpinejs';
 
 import '@themesberg/flowbite';

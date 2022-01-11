@@ -22,7 +22,7 @@
     </head>
     <body>
         {{-- 중앙 화면 : start --}}
-        <div class="w-screen h-screen flex justify-center items-center bg-gray-100">
+        <div class="w-screen h-screen flex justify-center items-center bg-gray-100 flex-col">
             @switch($path)
                 @case('login')
                     @yield('login_content')

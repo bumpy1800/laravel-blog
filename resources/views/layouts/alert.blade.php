@@ -4,8 +4,8 @@ controller에서 return redirect()->back()->with('error', '회원정보가 일�
 부트스트랩 필요
  --}} 
 @if (Session::has('success'))
-    <div class="alert alert-success alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert">
+    <div class="bg-green-300 mb-2 p-2 alert alert-success alert-dismissible" role="alert" id="alert" style="">
+        <button type="button" class="close" data-dismiss="alert" id="close">
             <i class="fa fa-times"></i>
         </button>
         <strong>Success !</strong> {{ session('success') }}
@@ -13,10 +13,17 @@ controller에서 return redirect()->back()->with('error', '회원정보가 일�
 @endif
 
 @if (Session::has('error'))
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert">
+    <div class="bg-rose-400 mb-2 p-2 alert alert-danger alert-dismissible" role="alert" id="alert" style="">
+        <button type="button" class="close" data-dismiss="alert" id="close">
             <i class="fa fa-times"></i>
         </button>
         <strong>Error !</strong> {{ session('error') }}
     </div>
 @endif
+<script type="text/javascript">
+    document.getElementById("close").addEventListener("click",Hide);
+
+    function Hide(){
+      document.getElementById('alert').style.display = "none";
+    };
+</script>

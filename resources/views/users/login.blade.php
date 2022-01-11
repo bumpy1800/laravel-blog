@@ -41,7 +41,7 @@
                 </label>
             </div>
             <button class="bg-purple-600 hover:bg-purple-900 text-white font-bold p-2 rounded w-80 m-2" id="login" type="submit"><span>로그인</span></button>
-            <button class="bg-violet-600 hover:bg-violet-900 text-white font-bold p-2 rounded w-80 m-2" id="register" type="button" onclick="location.href='{{ route('register.create') }}'"><span>회원가입</span></button>
+            <button class="bg-indigo-600 hover:bg-indigo-900 text-white font-bold p-2 rounded w-80 m-2" id="register" type="button" onclick="location.href='{{ route('register.create') }}'"><span>회원가입</span></button>
         </form>
 
 @endsection
