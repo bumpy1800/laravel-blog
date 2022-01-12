@@ -41,7 +41,9 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('/register/create', [RegisterController::class, 'create'])->name('register.create');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 Route::get('/userinfo', [UserController::class, 'index'])->name('userinfo.index');
+Route::get('/userinfo/picDelete', [UserController::class, 'picDelete'])->name('userinfo.picDelete');
 Route::post('/userinfo', [UserController::class, 'store'])->name('userinfo.store');
+//Route::PATCH('/userinfo/{id}', [UserController::class, 'update'])->name('userinfo.update');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

@@ -13,10 +13,12 @@ class CreateUser2Table extends Migration
      */
     public function up()
     {
+        //Schema::dropIfExists('user2');
         Schema::create('user2', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->unique();  
+            $table->timestamp('email_verified')->nullable();     
             $table->string('password');
             $table->rememberToken();
             $table->string('profile_photo_path', 2048)->nullable();
