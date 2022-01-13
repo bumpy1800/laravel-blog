@@ -42,8 +42,9 @@ Route::get('/register/create', [RegisterController::class, 'create'])->name('reg
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 Route::get('/userinfo', [UserController::class, 'index'])->name('userinfo.index');
 Route::get('/userinfo/picDelete', [UserController::class, 'picDelete'])->name('userinfo.picDelete');
+Route::get('/userinfo/{id}/delete', [UserController::class, 'delete'])->name('userinfo.delete');
 Route::post('/userinfo', [UserController::class, 'store'])->name('userinfo.store');
-//Route::PATCH('/userinfo/{id}', [UserController::class, 'update'])->name('userinfo.update');
+Route::PATCH('/userinfo/{id}', [UserController::class, 'update'])->name('userinfo.update');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

@@ -44,35 +44,47 @@
         </form>
         
       </div>
-
         <div class="w-4/6 md:w-3/5 p-8 bg-white lg:ml-4 shadow-md">
-          <div class="rounded shadow p-6 mb-3">
-            <div class="pb-6">
-              <label for="name" class="font-semibold text-gray-700 block pb-1">Name</label>
-              <div class="flex">
-                <input disabled id="username" class="border-1  rounded-r px-4 py-2 w-full" type="text" value="{{ Auth::user()->name }}" />
+          <form action="{{ route('userinfo.update',['id' => Auth::user()->id]) }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @method('PATCH')
+            <input type="hidden" name="" id="" value="" />{{-- enter로 인한 submit 막기 --}}
+            <div class="rounded shadow p-6 mb-3">
+              <div class="pb-6">
+                <label for="name" class="font-semibold text-gray-700 block pb-1">Name</label>
+                <div class="flex flex-col">
+                  <input disabled id="username" name="username" class="@error('username') is-invalid @enderror border-1  rounded-r px-4 py-2 w-full" type="text" value="{{ Auth::user()->name }}" />
+                @error('username')
+                  <div class="alert alert-danger text-red-600">{{ $message }}</div>
+                @enderror
+                </div>
+              </div>
+              <div class="pb-4">
+                <label for="about" class="font-semibold text-gray-700 flex pb-1">Email
+                  <div class="bg-rose-400 ml-2 px-2">
+                    <i class="fa fa-times"></i>
+                  인증되지않음
+                  </div>
+                </label>
+                <input disabled id="email" name="email" class="@error('email') is-invalid @enderror border-1  rounded-r px-4 py-2 w-full" type="email" value="{{ Auth::user()->email }}" />
+                @error('email')
+                  <div class="alert alert-danger text-red-600">{{ $message }}</div>
+                @enderror
               </div>
             </div>
-            <div class="pb-4">
-              <label for="about" class="font-semibold text-gray-700 flex pb-1">Email
-                <div class="bg-rose-400 ml-2 px-2">
-                  <i class="fa fa-times"></i>
-                인증되지않음
-                </div>
-              </label>
-              <input disabled id="email" class="border-1  rounded-r px-4 py-2 w-full" type="email" value="{{ Auth::user()->email }}" />
+            <div class="float-right">
+              <a href="#" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">이메일 인증</a>
+              <button type="button" id="modify" onclick="edit();" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">정보 수정</button>
             </div>
+          </form>
           </div>
-          <div class="float-right">
-            <a href="#" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">이메일 인증</a>
-            <button type="button" id="modify" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">정보 수정</button>
-          </div>
-        </div>
+    </div>
+    <div class="w-3/5 flex justify-end">
+      <a href="#" class="underline" onclick="del();">회원 탈퇴</a>
     </div>
 <script type="text/javascript">
-  document.getElementById("modify").addEventListener("click",update);
 
-  function update(){
+  function edit(){
     var username = document.getElementById('username');
     var email = document.getElementById('email');
     var modify = document.getElementById('modify');
@@ -80,9 +92,22 @@
     username.disabled=false;
     email.disabled=false;
     username.focus();
-    modify.innerText='수정완료';
-    modify.className="-mt-2 text-md font-bold text-white bg-indigo-700 rounded-full px-5 py-2 hover:bg-indigo-900";
-    modify.setAttribute('type','submit')
+    modify.innerText = '수정완료';
+    modify.className = "-mt-2 text-md font-bold text-white bg-indigo-700 rounded-full px-5 py-2 hover:bg-indigo-900";
+    modify.setAttribute('onclick','update();');
   };
+  function update(){
+    var modify = document.getElementById('modify');
+    modify.setAttribute('type','submit');
+  }
+  function del(){
+    var con_test = confirm("정말 탈퇴하시겠습니까?");
+    if(con_test == true){
+      location.href="{{ route('userinfo.delete',['id' => Auth::user()->id]) }}"
+    }
+    else if(con_test == false){
+        return;
+    } 
+  }
 </script>
 @endsection

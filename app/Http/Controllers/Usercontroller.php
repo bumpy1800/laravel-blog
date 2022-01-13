@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File; 
 use App\Models\User2;
 
 use Image;
@@ -58,5 +59,30 @@ class Usercontroller extends Controller
         $user->save();
 
         return redirect()->route('userinfo.index')->with('success', '사진이 제거되었습니다.');
+    }
+    public function update(Request $request, $id)
+    { 
+        $validatedData = $request->validate([
+            'username' => 'required|max:100',
+            'email' => 'required|email',
+        ]);
+        $user = User2::find($id);
+        $user->name = $validatedData['username'];
+        $user->email = $validatedData['email'];
+        $user->save();
+        return redirect()->route('userinfo.index')->with('success', '회원 정보가 수정되었습니다.');
+    }
+    public function delete(Request $request, $id){
+        if(Auth::user()->profile_photo_path){
+            //사진이 있는경우 db에 저장된 사진 경로 복호화해서 삭제
+            File::delete(Crypt::decryptString(Auth::user()->profile_photo_path));
+        }
+        $user = User2::find($id);
+        $user->delete();
+
+        return view('users.congratulations', [
+            'path' => 'congratulations',
+            'status' => 'delete',
+        ]);
     }
 }

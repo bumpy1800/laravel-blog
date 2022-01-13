@@ -49,8 +49,8 @@
 @section('login_script')
 
     <script>
-        document.getElementById("login").addEventListener("click", function(event){
-        event.preventDefault();
-        });
+        // document.getElementById("login").addEventListener("click", function(event){
+        // event.preventDefault();
+        // });
     </script>
 @endsection

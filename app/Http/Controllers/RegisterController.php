@@ -28,6 +28,9 @@ class RegisterController extends Controller
             'password' => Hash::make($validatedData['password']),
             'profile_photo_path' => null,
         ]);
-        return view("users.congratulations", ['path' => 'congratulations']);
+        return view("users.congratulations", [
+            'path' => 'congratulations',
+            'status' => 'register',
+        ]);
     }
 }
