@@ -10,7 +10,7 @@
 @endsection
 
 @section('userinfo_content')
-    <!-- This is an example component -->
+    <!-- 사진 유효성검사 에러메시지 alert창으로 표현 -->
     @error('pic')
         <script type="text/javascript">
 
@@ -18,8 +18,8 @@
 
         </script>
     @enderror
+    {{-- alert.blade.php 불러와서 성공실패 메시지 출력 --}}
     @include('layouts.alert')
-    {{-- @dump() --}}
     <div class="border-b-2 block md:flex w-3/5">
       <div class="text-center w-2/6 md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
         <div class="flex justify-between">
@@ -28,13 +28,15 @@
         <form action="{{ route('userinfo.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="w-full p-8 mx-2 flex justify-center">
-        @if (Auth::user()->profile_photo_path)
+          {{-- 회원DB에 사진이없으면 기본이미지 있으면 사진경로를 복호화해서 출력 --}}
+        @if (Auth::user()->profile_photo_path) 
             <img id="showImage" class="max-w-xs w-32 items-center border" src="{{ Crypt::decryptString(Auth::user()->profile_photo_path) }}" alt="">
         @else
             <img id="showImage" class="max-w-xs w-32 items-center border" src="{{ asset('storage/default_profile.jpg'); }}" alt="">
         @endif
                                   
         </div>
+        {{-- 그냥 컨트롤러에서 Auth::user()->id 해도 되지만 restful하게 설계하기위해 매개변수로 넘김 --}}
         <input type="hidden" id="id" name="id" value="{{ Auth::user()->id }}">
         <input type="file" id="pic" name="pic" class=" @error('pic') is-invalid @enderror-mt-2 mb-5 text-md font-bold text-white bg-gray-700 rounded-full hover:bg-gray-800">
           <button type="submit" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">사진 수정</button>
@@ -45,6 +47,7 @@
         
       </div>
         <div class="w-4/6 md:w-3/5 p-8 bg-white lg:ml-4 shadow-md">
+          {{-- @method('PATCH')를 해야 PATCH메소드가 지원됨 원래는 지원안함 --}}
           <form action="{{ route('userinfo.update',['id' => Auth::user()->id]) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
@@ -83,7 +86,7 @@
       <a href="#" class="underline" onclick="del();">회원 탈퇴</a>
     </div>
 <script type="text/javascript">
-
+  //수정버튼을 누르면 input태그의 disable이 해제되고 버튼이 수정완료로 바뀌며 onclick대상함수가 변경
   function edit(){
     var username = document.getElementById('username');
     var email = document.getElementById('email');
@@ -96,10 +99,12 @@
     modify.className = "-mt-2 text-md font-bold text-white bg-indigo-700 rounded-full px-5 py-2 hover:bg-indigo-900";
     modify.setAttribute('onclick','update();');
   };
+  //submit시기는 함수
   function update(){
     var modify = document.getElementById('modify');
     modify.setAttribute('type','submit');
   }
+  //confirm창으로 탈퇴여부 파악
   function del(){
     var con_test = confirm("정말 탈퇴하시겠습니까?");
     if(con_test == true){

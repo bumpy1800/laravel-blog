@@ -133,8 +133,8 @@
                                     <a href="#"
                                     class="text-black font-normal border-b-2 border-gray-200 hover:border-teal-500">You're already member?
                                         <span class="text-black font-semibold">
-                        Login
-                    </span>
+                                        Login
+                                        </span>
                                     </a>
                                 </div>
                     </div>

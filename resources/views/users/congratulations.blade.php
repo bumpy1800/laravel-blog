@@ -10,6 +10,7 @@
 @endsection
 
 @section('congratulations_content')
+{{-- 회원가입과 탈퇴에따라 다르게 출력 --}}
 @if ($status == 'delete')
     <div class="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md">
         <p class="mb-5 text-3xl uppercase text-gray-600">회원 탈퇴 완료</p>
