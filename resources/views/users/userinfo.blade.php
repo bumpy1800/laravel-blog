@@ -83,7 +83,11 @@
           </div>
     </div>
     <div class="w-3/5 flex justify-end">
-      <a href="#" class="underline" onclick="del();">회원 탈퇴</a>
+      <form action="{{ route('userinfo.delete',['id' => Auth::user()->id]) }}" method="post" id="del">
+        @csrf
+        @method('DELETE')
+        <a href="#" class="underline" onclick="del();">회원 탈퇴</a>
+      </form>
     </div>
 <script type="text/javascript">
   //수정버튼을 누르면 input태그의 disable이 해제되고 버튼이 수정완료로 바뀌며 onclick대상함수가 변경
@@ -108,7 +112,8 @@
   function del(){
     var con_test = confirm("정말 탈퇴하시겠습니까?");
     if(con_test == true){
-      location.href="{{ route('userinfo.delete',['id' => Auth::user()->id]) }}"
+      //location.href="{{ route('userinfo.delete',['id' => Auth::user()->id]) }}"
+      document.getElementById('del').submit();
     }
     else if(con_test == false){
         return;

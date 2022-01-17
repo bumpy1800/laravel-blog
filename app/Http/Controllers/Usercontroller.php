@@ -56,6 +56,8 @@ class Usercontroller extends Controller
 
         $user = User2::find(Auth::user()->id);
 
+        File::delete(Crypt::decryptString($user->profile_photo_path));
+
         $user->profile_photo_path = null;
 
         $user->save();

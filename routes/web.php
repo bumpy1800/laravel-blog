@@ -37,15 +37,23 @@ Route::get('/', function(){
 
 Route::get('/login', [LoginController::class, 'index'])->name('login.index');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::post('login', [LoginController::class, 'login'])->name('login');
-Route::get('/register/create', [RegisterController::class, 'create'])->name('register.create');
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-Route::get('/userinfo', [UserController::class, 'show'])->name('userinfo.show');
-Route::get('/userinfo/picDelete', [UserController::class, 'picDelete'])->name('userinfo.picDelete');
-Route::get('/userinfo/{id}/delete', [UserController::class, 'delete'])->name('userinfo.delete');
-Route::post('/userinfo', [UserController::class, 'store'])->name('userinfo.store');
-Route::PATCH('/userinfo/{id}', [UserController::class, 'update'])->name('userinfo.update');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 
+//name()으로 라우트이름앞에 register.을 붙히고 prefix()로 URL앞에 /register/를 붙힌다
+Route::name('register.')->prefix('register')->group(function () {
+    Route::get('/create', [RegisterController::class, 'create'])->name('create');
+    Route::post('/', [RegisterController::class, 'store'])->name('store');
+});
+
+//middleware()으로 group()안에 있는 모든 라우팅에게 middleware()안에 인증을 적용한다
+//name()으로 라우트이름앞에 register.을 붙히고 prefix()로 URL앞에 /register/를 붙힌다
+Route::middleware(['auth'])->name('userinfo.')->prefix('userinfo')->group(function () {
+    Route::get('/', [UserController::class, 'show'])->name('show');
+    Route::get('/picDelete', [UserController::class, 'picDelete'])->name('picDelete');
+    Route::delete('/{id}/delete', [UserController::class, 'delete'])->name('delete');
+    Route::post('/', [UserController::class, 'store'])->name('store');
+    Route::PATCH('/{id}', [UserController::class, 'update'])->name('update');
+});
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
