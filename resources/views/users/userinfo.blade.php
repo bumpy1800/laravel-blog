@@ -64,10 +64,17 @@
               </div>
               <div class="pb-4">
                 <label for="about" class="font-semibold text-gray-700 flex pb-1">Email
-                  <div class="bg-rose-400 ml-2 px-2">
-                    <i class="fa fa-times"></i>
-                  인증되지않음
-                  </div>
+                  @if (Auth::user()->email_verified_at)
+                    <div class="bg-green-400 ml-2 px-2">
+                      <i class="far fa-circle"></i>
+                    인증 완료
+                    </div>
+                  @else
+                    <div class="bg-rose-400 ml-2 px-2">
+                      <i class="fa fa-times"></i>
+                    인증되지않음
+                    </div>
+                  @endif
                 </label>
                 <input disabled id="email" name="email" class="@error('email') is-invalid @enderror border-1  rounded-r px-4 py-2 w-full" type="email" value="{{ Auth::user()->email }}" />
                 @error('email')
@@ -76,7 +83,10 @@
               </div>
             </div>
             <div class="float-right">
-              <a href="#" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">이메일 인증</a>
+              @if (!Auth::user()->email_verified_at)
+                <a href="{{ URL::route('verification.notice') }}" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">이메일 인증</a>
+              @endif
+              
               <button type="button" id="modify" onclick="edit();" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">정보 수정</button>
             </div>
           </form>
