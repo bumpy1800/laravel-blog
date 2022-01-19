@@ -78,6 +78,7 @@ class Usercontroller extends Controller
         $user->save();
         return redirect()->route('userinfo.show')->with('success', '회원 정보가 수정되었습니다.');
     }
+    
     public function delete(Request $request, $id){
         if(Auth::user()->profile_photo_path){
             //사진이 있는경우 db에 저장된 사진 경로 복호화해서 삭제
