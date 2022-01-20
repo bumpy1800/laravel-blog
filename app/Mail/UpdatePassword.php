@@ -16,12 +16,12 @@ class UpdatePassword extends Mailable
      *
      * @return void
      */
-    public $email;
+    public $name;
     public $token;
 
     public function __construct($name, $token)
     {
-        $this->email = $email;
+        $this->name = $name;
         $this->token = $token;
     }
 
@@ -32,11 +32,11 @@ class UpdatePassword extends Mailable
      */
     public function build()
     {
-        $user['email'] = $this->email;
+        $user['name'] = $this->name;
         $user['token'] = $this->token;
 
         return $this->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
         ->subject('비밀번호 변경 링크')
-        ->view('template.reset-password', ['user' => $user]);
+        ->view('mail.forgot-password', ['user' => $user]);
     }
 }

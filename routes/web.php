@@ -54,6 +54,12 @@ Route::middleware(['auth'])->name('userinfo.')->prefix('userinfo')->group(functi
     Route::post('/', [UserController::class, 'store'])->name('store');
     Route::PATCH('/{id}', [UserController::class, 'update'])->name('update');
 });
+
+Route::get('/forgot-password', [UserController::class, 'forgotPasswordNotice'])->name('forgot-password');
+Route::get('/forgot-password/{token}', [UserController::class, 'changePassword'])->name('update-password');
+Route::post('/forgot-password', [UserController::class, 'forgotPasswordValidate'])->name('forgot-password');
+Route::post('/updatePassword', [UserController::class, 'updatePassword'])->name('update-password');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');

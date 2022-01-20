@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use App\Models\User2;
+use App\Mail\UpdatePassword;
 
 use Image;
 
@@ -91,5 +94,48 @@ class Usercontroller extends Controller
             'path' => 'congratulations',
             'status' => 'delete',
         ]);
+    }
+
+    public function forgotPasswordNotice(){
+
+        return view('users.forgot-password-notice',[
+            'path' => 'forgot_password_notice'
+        ]);
+    }
+
+    public function forgotPasswordValidate(Request $request){
+        //유효성 검사
+        $validatedData = $request->validate([
+            'email' => 'required|email'
+        ]);
+        //가입된 이메일이 아닌경우
+        if(!User2::where('email', $request->input('email'))->first()){
+
+            return redirect()->back()->with('status', '가입되지 않은 이메일 입니다.');
+        }
+        //가입된 이메일이지만 인증이 되지않은경우
+        elseif(User2::where('email', $request->input('email'))->where('email_verified_at',  null)->first()){
+
+            return redirect()->back()->with('status', '이메일 인증이 안된 이메일 입니다 인증을 먼저 진행해주세요.');
+        }
+        //가입된 이메일이고 인증로 이루어진 이메일인 경우
+        elseif($user = User2::where('email', $request->input('email'))->where('email_verified_at', '!=',  null)->first()){
+
+            $token = Str::random(60);
+
+            Mail::to($user->email)->send(new UpdatePassword($user->name, $token));
+
+            return redirect()->back()->with('success', '입력하신 이메일로 비밀번호 변경 링크를 전송했습니다 확인해주세요.');
+        }
+    }
+
+    public function changePassword(){
+        return view('users.update-password',[
+            'path' => 'update_password'
+        ]);
+    }
+
+    public function updatePassword(){
+
     }
 }

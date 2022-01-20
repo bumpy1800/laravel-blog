@@ -15,6 +15,12 @@
             @case('info')
                 @yield('userinfo_header')        
                 @break
+            @case('forgot_password_notice')
+                @yield('forgot_password_notice_header')        
+                @break
+            @case('update_password')
+                @yield('update_password_header')        
+                @break
             @default
                 
         @endswitch
@@ -35,9 +41,14 @@
                     @break
                 @case('info')
                     @yield('userinfo_content')        
-                    @break          
+                    @break
+                @case('forgot_password_notice')
+                    @yield('forgot_password_notice_content')        
+                    @break  
+                @case('update_password')
+                    @yield('update_password_content')        
+                    @break        
                 @default
-                    
             @endswitch
         </div>
         {{-- 중앙 화면 : end --}}

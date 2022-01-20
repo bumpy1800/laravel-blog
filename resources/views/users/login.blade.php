@@ -41,7 +41,7 @@
                 </label>
             </div>
             <label class="block text-gray-500 font-bold my-4 flex items-center"> 
-                <a href="#" class="ml-2 text-sm py-2 text-gray-600 text-left underline">비밀번호를 잊어버리셨나요?</a>
+                <a href="{{ route('forgot-password') }}" class="ml-2 text-sm py-2 text-gray-600 text-left underline">비밀번호를 잊어버리셨나요?</a>
             </label>
             <button class="bg-purple-600 hover:bg-purple-900 text-white font-bold p-2 rounded w-80 m-2" id="login" type="submit"><span>로그인</span></button>
             <button class="bg-indigo-600 hover:bg-indigo-900 text-white font-bold p-2 rounded w-80 m-2" id="register" type="button" onclick="location.href='{{ route('register.create') }}'"><span>회원가입</span></button>
