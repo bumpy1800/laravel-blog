@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\User2;
 use App\Mail\UpdatePassword;
@@ -121,7 +123,14 @@ class Usercontroller extends Controller
         //가입된 이메일이고 인증로 이루어진 이메일인 경우
         elseif($user = User2::where('email', $request->input('email'))->where('email_verified_at', '!=',  null)->first()){
 
+            //토큰자체 생성 
             $token = Str::random(60);
+            //토큰과 이메일을 password_resets테이블에 저장(만료시킬때 활용)
+            DB::table('password_resets')->insert([
+                'email' => $request->input('email'),
+                'token' => $token,
+                'created_at' => now()
+            ]);
 
             Mail::to($user->email)->send(new UpdatePassword($user->name, $token));
 
@@ -135,7 +144,42 @@ class Usercontroller extends Controller
         ]);
     }
 
-    public function updatePassword(){
+    public function updatePassword(Request $request){
+        //현재 비밀번호가 입력된다면(내정보에서 온 경우)
+        if($request->input('current_password')){
+            if(!Hash::check($request->input('current_password'), Auth::user()->password)){
+                return redirect()->back()->with('error', '현재 비밀번호가 일치하지않습니다');
+            }
+        }
+        //유효성 검사
+        $validatedData = $request->validate([
+            'password' => 'required|max:255|min:8',
+            'password_confirm' => 'required|same:password|min:8',
+        ]);
 
+        //정보 수정
+        //로그인된 경우
+        if($request->input('current_password')){
+            $user = User2::find(Auth::user()->id);
+            $user->password = Hash::make($validatedData['password']);
+            $user->save();
+            Auth::logout();
+            return redirect()->route('main')->with('success', '비밀번호가 변경되었습니다.');
+        }
+        else{
+            //비로그인인 경우
+            //url부분에서 토큰부분만 자르고 DB에 조회해서 정보 update
+            $url = explode('/',$request->input('url')); 
+            $token = end($url);
+
+            $email = DB::table('password_resets')->select('email')->where('token', $token)->get();
+
+            $user = User2::where('email', $email[0]->email)->first();
+            $user->password = Hash::make($validatedData['password']);
+            $user->save();
+
+            return redirect()->route('main')->with('success', '비밀번호가 변경되었습니다.');
+        }
+        
     }
 }

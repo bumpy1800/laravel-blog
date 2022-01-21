@@ -61,14 +61,14 @@
                                         </p>
 
                                         <p style="text-align: center;">
-                                            <a href="{{ route('update-password', ['token' => $user['token']]) }}" class="btn">비밀번호 변경</a>
+                                            <a href="{{ route("changePassword",$user['token']) }}" class="btn">비밀번호 변경</a>
                                         </p>
 
 
                                         <p style="margin:100px 0 12px 0;font-size:14px;font-family:Arial,sans-serif;">
                                             버튼이 작동하지 않는다면 이 링크를 눌러서 이동해주세요
-                                            <a href="{{ route('update-password', ['token' => $user['token']]) }}">
-                                                {{ route('update-password', ['token' => $user['token']]) }}
+                                            <a href="{{ route('changePassword',$user['token']) }}">
+                                                {{ route("changePassword",$user['token']) }}
                                             </a>
                                              </p>
                                     </td>

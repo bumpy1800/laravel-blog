@@ -83,11 +83,11 @@
               </div>
             </div>
             <div class="float-right">
-              <a href="#" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">비밀번호 변경</a>
               @if (!Auth::user()->email_verified_at)
                 <a href="{{ URL::route('verification.notice') }}" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">이메일 인증</a>
+              @else
+                <a href="{{ route('forgot-password') }}" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">비밀번호 변경</a>
               @endif
-              
               <button type="button" id="modify" onclick="edit();" class="-mt-2 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">정보 수정</button>
             </div>
           </form>

@@ -56,7 +56,7 @@ Route::middleware(['auth'])->name('userinfo.')->prefix('userinfo')->group(functi
 });
 
 Route::get('/forgot-password', [UserController::class, 'forgotPasswordNotice'])->name('forgot-password');
-Route::get('/forgot-password/{token}', [UserController::class, 'changePassword'])->name('update-password');
+Route::get('/forgot-password/{token}', [UserController::class, 'changePassword'])->name('changePassword');
 Route::post('/forgot-password', [UserController::class, 'forgotPasswordValidate'])->name('forgot-password');
 Route::post('/updatePassword', [UserController::class, 'updatePassword'])->name('update-password');
 
