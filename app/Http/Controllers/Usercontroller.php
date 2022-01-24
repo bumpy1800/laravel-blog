@@ -137,11 +137,19 @@ class Usercontroller extends Controller
             return redirect()->back()->with('success', '입력하신 이메일로 비밀번호 변경 링크를 전송했습니다 확인해주세요.');
         }
     }
-
+    
     public function changePassword(){
-        return view('users.update-password',[
-            'path' => 'update_password'
-        ]);
+        $url = explode('/',url()->current()); 
+        $token = end($url);
+        //토큰값이 db에 남아있는지 확인해서 만료된 토큰인지 체크
+        if(DB::table('password_resets')->where('token', $token)->exists()){
+            return view('users.update-password',[
+                'path' => 'update_password'
+            ]);
+        }
+        else{
+            return redirect()->route('main')->with('status', '만료된 url입니다 이메일을 재전송을 요청하십시요.');
+        }
     }
 
     public function updatePassword(Request $request){
@@ -164,7 +172,7 @@ class Usercontroller extends Controller
             $user->password = Hash::make($validatedData['password']);
             $user->save();
             Auth::logout();
-            return redirect()->route('main')->with('success', '비밀번호가 변경되었습니다.');
+            return redirect()->route('main')->with('status', '비밀번호가 변경되었습니다.');
         }
         else{
             //비로그인인 경우
@@ -178,7 +186,7 @@ class Usercontroller extends Controller
             $user->password = Hash::make($validatedData['password']);
             $user->save();
 
-            return redirect()->route('main')->with('success', '비밀번호가 변경되었습니다.');
+            return redirect()->route('main')->with('status', '비밀번호가 변경되었습니다.');
         }
         
     }

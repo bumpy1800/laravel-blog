@@ -11,10 +11,10 @@
 @endsection
 
 @section('main_content')
-    @if(Session::has('success'))
+    @if(Session::has('status'))
     <script type="text/javascript">
 
-        alert("{{ session()->get('success') }}");
+        alert("{{ session()->get('status') }}");
 
     </script>
     @endif

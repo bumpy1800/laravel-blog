@@ -27,7 +27,7 @@ class LoginController extends Controller
         //로그인기능 attempt()1번째 인자에 회원정보, 2번째 인자에 remember_token에 정보가 들어갈이 true/false로 판단
         if (Auth::attempt($validatedData, $remember)) {
             //화면에 alert.blade.php에 세션으로 success인지 error인지 전달
-            return redirect()->route('main')->with('success', '로그인 되었습니다 어서오십시요');
+            return redirect()->route('main')->with('status', '로그인 되었습니다 어서오십시요');
         }
         else{
             return redirect()->back()->with('error', '회원정보가 일치하지 않습니다!!');

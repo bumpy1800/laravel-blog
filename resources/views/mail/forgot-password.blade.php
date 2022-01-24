@@ -32,6 +32,13 @@
     </style>
 </head>
 <body style="margin:0;padding:0;">
+    @if(Session::has('error'))
+    <script type="text/javascript">
+
+        alert("{{ session()->get('error') }}");
+
+    </script>
+    @endif
     <table role="presentation"
         style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
         <tr>
