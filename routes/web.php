@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,11 +36,13 @@ Route::get('/', function(){
     return view('main');
 })->name('main');
 
+//로그인 관련 라우팅
 Route::get('/login', [LoginController::class, 'index'])->name('login.index');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 //name()으로 라우트이름앞에 register.을 붙히고 prefix()로 URL앞에 /register/를 붙힌다
+//회원가입 관련 라우팅
 Route::name('register.')->prefix('register')->group(function () {
     Route::get('/create', [RegisterController::class, 'create'])->name('create');
     Route::post('/', [RegisterController::class, 'store'])->name('store');
@@ -47,6 +50,7 @@ Route::name('register.')->prefix('register')->group(function () {
 
 //middleware()으로 group()안에 있는 모든 라우팅에게 middleware()안에 인증을 적용한다
 //name()으로 라우트이름앞에 register.을 붙히고 prefix()로 URL앞에 /register/를 붙힌다
+//내정보 관련 라우팅
 Route::middleware(['auth'])->name('userinfo.')->prefix('userinfo')->group(function () {
     Route::get('/', [UserController::class, 'show'])->name('show');
     Route::get('/picDelete', [UserController::class, 'picDelete'])->name('picDelete');
@@ -55,10 +59,14 @@ Route::middleware(['auth'])->name('userinfo.')->prefix('userinfo')->group(functi
     Route::PATCH('/{id}', [UserController::class, 'update'])->name('update');
 });
 
+//비번찾기 관련 라우팅
 Route::get('/forgot-password', [UserController::class, 'forgotPasswordNotice'])->name('forgot-password');
 Route::get('/forgot-password/{token}', [UserController::class, 'changePassword'])->name('changePassword');
 Route::post('/forgot-password', [UserController::class, 'forgotPasswordValidate'])->name('forgot-password');
 Route::post('/updatePassword', [UserController::class, 'updatePassword'])->name('update-password');
+
+//포스팅 관련 라우팅
+Route::resource('posts', PostController::class);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

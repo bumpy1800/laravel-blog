@@ -1,59 +1,149 @@
 @extends('layouts.main')
 
-@section('main_header')
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"  />
-  <link rel="stylesheet" href="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/flowbite.min.css" />
-  {{-- tailwind dropdown 이나 modal같은 기능작용 --}}
-  <title>{{ env('APP_NAME') }}</title>
-@endsection
-
 @section('main_content')
-    @if(Session::has('status'))
-    <script type="text/javascript">
-
-        alert("{{ session()->get('status') }}");
-
-    </script>
-    @endif
-
-    <div class="logo">
-      <h1 class="text-white ml-4 cursor-pointer text-2xl">Laravel-Blog</h1>
-    </div>
-    <ul class="flex items-center">
-    {{-- 로그인 여부에 따라 navbar가 달라짐 --}}
-    @if (Auth::check())
-    <li>
-      <button id="dropdownButton" data-dropdown-toggle="dropdown" class="text-white mr-4 bg-gray-800 hover:bg-gray-700 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-        {{ Auth::user()->name }}
-        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
-    </li>
-    <!-- Dropdown menu -->
-    <div id="dropdown" class="hidden z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
-        <ul class="py-1" aria-labelledby="dropdownButton">
-          <li>
-            <a href="{{ route('userinfo.show') }}" class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">내정보</a>
-          </li>
-          <li>
-            <a href="{{ route('logout') }}" class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" >로그아웃</a>
-          </li>
-        </ul>
-    </div>
-    <li>
-      <a class="text-white mr-4 bg-gray-500 pt-4 pb-4 pr-5 pl-5 hover:bg-gray-600 transition-all rounded" href="#" style="
-  ">글쓰기</a>
-    </li>
-    @else
-    <li>
-      <a class="text-white mr-4 bg-gray-500 pt-4 pb-4 pr-5 pl-5 hover:bg-gray-600 transition-all rounded" href="{{ route('login.index') }}" style="
-    ">로그인</a>
-    </li>
-  @endif
-    </ul>
-      {{-- tailwind dropdown 이나 modal같은 기능작용 --}}
-    <script src="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/flowbite.bundle.js"></script>
-
+<div class="overflow-x-hidden bg-gray-100">
+  <div class="px-6 py-8">
+      <div class="container flex justify-between mx-auto">
+          <div class="w-full lg:w-8/12">
+              <div class="flex items-center justify-between">
+                  <h1 class="text-xl font-bold text-gray-700 md:text-2xl">전체글</h1>
+              </div>
+              <div class="mt-6">
+                  <div class="max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md">
+                      <div class="flex items-center justify-between"><span class="font-light text-gray-600">Jun 1,
+                              2020</span><a href="#"
+                              class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">Laravel</a>
+                      </div>
+                      <div class="mt-2"><a href="{{ route('posts.index') }}" class="text-2xl font-bold text-gray-700 hover:underline">Build
+                              Your New Idea with Laravel Freamwork.</a>
+                          <p class="mt-2 text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                              Tempora expedita dicta totam aspernatur doloremque. Excepturi iste iusto eos enim
+                              reprehenderit nisi, accusamus delectus nihil quis facere in modi ratione libero!</p>
+                      </div>
+                      <div class="flex items-center justify-between mt-4"><a href="#"
+                              class="text-blue-500 hover:underline">Read more</a>
+                          <div><a href="#" class="flex items-center"><img
+                                      src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=731&amp;q=80"
+                                      alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
+                                  <h1 class="font-bold text-gray-700 hover:underline">Alex John</h1>
+                              </a></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="mt-6">
+                  <div class="max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md">
+                      <div class="flex items-center justify-between"><span class="font-light text-gray-600">mar 4,
+                              2019</span><a href="#"
+                              class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">Design</a>
+                      </div>
+                      <div class="mt-2"><a href="#"
+                              class="text-2xl font-bold text-gray-700 hover:underline">Accessibility tools for
+                              designers and developers</a>
+                          <p class="mt-2 text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                              Tempora expedita dicta totam aspernatur doloremque. Excepturi iste iusto eos enim
+                              reprehenderit nisi, accusamus delectus nihil quis facere in modi ratione libero!</p>
+                      </div>
+                      <div class="flex items-center justify-between mt-4"><a href="#"
+                              class="text-blue-500 hover:underline">Read more</a>
+                          <div><a href="#" class="flex items-center"><img
+                                      src="https://images.unsplash.com/photo-1464863979621-258859e62245?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=333&amp;q=80"
+                                      alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
+                                  <h1 class="font-bold text-gray-700 hover:underline">Jane Doe</h1>
+                              </a></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="mt-6">
+                  <div class="max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md">
+                      <div class="flex items-center justify-between"><span class="font-light text-gray-600">Feb 14,
+                              2019</span><a href="#"
+                              class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">PHP</a>
+                      </div>
+                      <div class="mt-2"><a href="#" class="text-2xl font-bold text-gray-700 hover:underline">PHP:
+                              Array to Map</a>
+                          <p class="mt-2 text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                              Tempora expedita dicta totam aspernatur doloremque. Excepturi iste iusto eos enim
+                              reprehenderit nisi, accusamus delectus nihil quis facere in modi ratione libero!</p>
+                      </div>
+                      <div class="flex items-center justify-between mt-4"><a href="#"
+                              class="text-blue-500 hover:underline">Read more</a>
+                          <div><a href="#" class="flex items-center"><img
+                                      src="https://images.unsplash.com/photo-1531251445707-1f000e1e87d0?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=281&amp;q=80"
+                                      alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
+                                  <h1 class="font-bold text-gray-700 hover:underline">Lisa Way</h1>
+                              </a></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="mt-6">
+                  <div class="max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md">
+                      <div class="flex items-center justify-between"><span class="font-light text-gray-600">Dec 23,
+                              2018</span><a href="#"
+                              class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">Django</a>
+                      </div>
+                      <div class="mt-2"><a href="#" class="text-2xl font-bold text-gray-700 hover:underline">Django
+                              Dashboard - Learn by Coding</a>
+                          <p class="mt-2 text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                              Tempora expedita dicta totam aspernatur doloremque. Excepturi iste iusto eos enim
+                              reprehenderit nisi, accusamus delectus nihil quis facere in modi ratione libero!</p>
+                      </div>
+                      <div class="flex items-center justify-between mt-4"><a href="#"
+                              class="text-blue-500 hover:underline">Read more</a>
+                          <div><a href="#" class="flex items-center"><img
+                                      src="https://images.unsplash.com/photo-1500757810556-5d600d9b737d?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=735&amp;q=80"
+                                      alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
+                                  <h1 class="font-bold text-gray-700 hover:underline">Steve Matt</h1>
+                              </a></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="mt-6">
+                  <div class="max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md">
+                      <div class="flex items-center justify-between"><span class="font-light text-gray-600">Mar 10,
+                              2018</span><a href="#"
+                              class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">Testing</a>
+                      </div>
+                      <div class="mt-2"><a href="#" class="text-2xl font-bold text-gray-700 hover:underline">TDD
+                              Frist</a>
+                          <p class="mt-2 text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                              Tempora expedita dicta totam aspernatur doloremque. Excepturi iste iusto eos enim
+                              reprehenderit nisi, accusamus delectus nihil quis facere in modi ratione libero!</p>
+                      </div>
+                      <div class="flex items-center justify-between mt-4"><a href="#"
+                              class="text-blue-500 hover:underline">Read more</a>
+                          <div><a href="#" class="flex items-center"><img
+                                      src="https://images.unsplash.com/photo-1502980426475-b83966705988?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=373&amp;q=80"
+                                      alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
+                                  <h1 class="font-bold text-gray-700 hover:underline">Khatab Wedaa</h1>
+                              </a></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="mt-8">
+                  <div class="flex justify-center">
+                      <a href="#" class="px-3 py-2 mx-1 font-medium text-gray-500 bg-white rounded-md cursor-not-allowed">
+                          previous
+                      </a>
+                  
+                      <a href="#" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-blue-500 hover:text-white">
+                          1
+                      </a>
+                  
+                      <a href="#" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-blue-500 hover:text-white">
+                          2
+                      </a>
+                  
+                      <a href="#" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-blue-500 hover:text-white">
+                          3
+                      </a>
+                  
+                      <a href="#" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-blue-500 hover:text-white">
+                          Next
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 @endsection
