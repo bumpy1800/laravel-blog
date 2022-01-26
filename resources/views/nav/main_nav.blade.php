@@ -45,7 +45,7 @@
     </ul>
 </div>
 <li>
-  <a class="text-white mr-4 bg-gray-500 pt-4 pb-4 pr-5 pl-5 hover:bg-gray-600 transition-all rounded" href="#" style="
+  <a class="text-white mr-4 bg-gray-500 pt-4 pb-4 pr-5 pl-5 hover:bg-gray-600 transition-all rounded" href="{{ route('posts.create') }}" style="
 ">글쓰기</a>
 </li>
 @else
