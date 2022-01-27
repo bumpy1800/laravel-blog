@@ -65,8 +65,9 @@ Route::get('/forgot-password/{token}', [UserController::class, 'changePassword']
 Route::post('/forgot-password', [UserController::class, 'forgotPasswordValidate'])->name('forgot-password');
 Route::post('/updatePassword', [UserController::class, 'updatePassword'])->name('update-password');
 
-//포스팅 관련 라우팅
+//포스팅 관련 라우팅(auth미들웨어를 컨트롤러에서 설정함)
 Route::resource('posts', PostController::class);
+Route::post('uploads', [PostController::class, 'uploadImage'])->name('posts.upload');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

@@ -24,7 +24,7 @@ class Usercontroller extends Controller
             'path' => 'info',
         ]);
     }
-
+    //사진 수정
     public function store(Request $request){
         //파일이 입력되었을때만 작동
         if($request->hasfile('pic')){
@@ -69,6 +69,7 @@ class Usercontroller extends Controller
 
         return redirect()->route('userinfo.show')->with('success', '사진이 제거되었습니다.');
     }
+    //정보 수정
     public function update(Request $request, $id)
     { 
         //유효성 검사

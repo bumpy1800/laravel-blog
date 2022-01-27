@@ -13,12 +13,12 @@ class CreatePostTable extends Migration
      */
     public function up()
     {
+        //Schema::dropIfExists('post');
         Schema::create('post', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('writer');
-            $table->string('content', 9999);
-            $table->string('photo_path', 2048)->nullable();
+            $table->longText('content');
             $table->timestamps();
         });
     }
