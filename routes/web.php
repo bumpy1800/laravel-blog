@@ -32,9 +32,7 @@ PUT/PATCH	/photos/{photo}	        update	    photos.update
 //     return view('welcome');
 // });
 
-Route::get('/', function(){
-    return view('main');
-})->name('main');
+Route::get('/', [PostController::class, 'index'])->name('main');
 
 //로그인 관련 라우팅
 Route::get('/login', [LoginController::class, 'index'])->name('login.index');

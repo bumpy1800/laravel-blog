@@ -8,7 +8,7 @@
     {{-- tailwind dropdown 이나 modal같은 기능작용 --}}
     <link rel="stylesheet" href="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/flowbite.min.css" />
 
-    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <script src="{{ asset("ckeditor/ckeditor.js") }}"></script>
     
     <title>{{ env('APP_NAME') }}</title>
 @endsection
@@ -41,8 +41,8 @@
   </form>
   <script>
         CKEDITOR.replace('editor', {
-            filebrowserUploadUrl: "{{ route('posts.upload', ['_token' => csrf_token()]) }}",
-            filebrowserUploadMethod: 'form'
-        })
+          filebrowserUploadUrl: "{{ route('posts.upload', ['_token' => csrf_token()]) }}",
+          filebrowserUploadMethod: 'form',
+        });
     </script>
 @endsection
