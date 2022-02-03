@@ -20,7 +20,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::all();
+        $post = Post::paginate(5);
 
         return view('main',['posts' => $post]);
     }
@@ -72,7 +72,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view('posts.post_detail',['posts' => $post]);
     }
 
     /**

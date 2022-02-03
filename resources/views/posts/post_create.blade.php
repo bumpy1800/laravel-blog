@@ -8,7 +8,7 @@
     {{-- tailwind dropdown 이나 modal같은 기능작용 --}}
     <link rel="stylesheet" href="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/flowbite.min.css" />
 
-    <script src="{{ asset("ckeditor/ckeditor.js") }}"></script>
+    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
     
     <title>{{ env('APP_NAME') }}</title>
 @endsection
