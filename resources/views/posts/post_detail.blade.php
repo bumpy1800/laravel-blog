@@ -3,7 +3,7 @@
 @section('post_detail_content')
 <section class="font-mono bg-white container mx-auto px-5">
     <div class="flex flex-col items-center py-8">
-      <div class="flex flex-col w-9/12 mb-12 text-left">
+      <div class="flex flex-col w-9/12 mb-10 text-left">
         <span class="font-light text-gray-600">{{ $posts->created_at->format('Y/m/d H:i') }}</span>
         <div class="w-full mx-auto lg:w-1/2">
           <h1 class="mx-auto mb-6 text-2xl font-semibold text-black lg:text-3xl">{{ $posts->title }}</h1>
@@ -19,6 +19,28 @@
           </div>
         </div>
       </div>
+      @if (Auth::check() && $posts->writer == Auth::user()->name)
+      <form action="{{ route('posts.destroy',['post' => $posts]) }}" method="post" class="w-9/12" id="del">
+        @csrf
+        @method('DELETE')
+          <a href="{{ route('posts.edit',['post' => $posts]) }}" 
+            class="-mt-2 mr-3 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">수정하기</a>
+          <a onclick="del();" href='#'
+            class="-mt-2 mr-3 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">삭제하기</a>
+      </form>
+      @endif
     </div>
   </section>
+  <script>
+    //confirm창으로 게시글 삭제여부 파악
+    function del(){
+      var con_test = confirm('정말 삭제하시겠습니까?');
+      if(con_test == true){
+        document.getElementById('del').submit();
+      }
+      else if(con_test == false){
+        return;
+      }
+    }
+  </script>
 @endsection

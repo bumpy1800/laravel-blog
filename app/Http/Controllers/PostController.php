@@ -20,7 +20,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::paginate(5);
+        //최근에 올라온 게시물 순으로 5개씩 가져오기
+        $post = Post::orderby('created_at', 'desc')->paginate(5);
 
         return view('main',['posts' => $post]);
     }
@@ -72,6 +73,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        //post 모델객체 자체를 매개변수로 받기때문에 db에서 값을 가져올 필요가없음
         return view('posts.post_detail',['posts' => $post]);
     }
 
@@ -83,7 +85,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        //post 모델객체 자체를 매개변수로 받기때문에 db에서 값을 가져올 필요가없음
+        return view('posts.post_edit',['posts' => $post]);
     }
 
     /**
@@ -95,7 +98,24 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        //유효성 검사
+        $validatedData = $request->validate([
+            'title' => 'required|max:100',
+            'editor' => 'required',
+        ]);
+
+        //정보 수정
+        $posts = Post::find($post->id);
+        $posts->title = $validatedData['title'];
+        $posts->content = $validatedData['editor'];
+        $posts->save();
+
+        if(!is_null($posts)){
+            return redirect()->route('main')->with('status', '수정이 완료되었습니다.');
+        }
+        else{
+            return redirect()->back()->with('status', '수정에 실패했습니다.');
+        }
     }
 
     /**
@@ -106,7 +126,15 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $posts = Post::find($post->id);
+        $posts->delete();
+
+        if(!is_null($posts)){
+            return redirect()->route('main')->with('status', '게시글이 삭제되었습니다');
+        }
+        else{
+            return redirect()->back()->with('status', '오류로인해 삭제되지않았습니다');
+        }
     }
 
     public function uploadImage(Request $request)

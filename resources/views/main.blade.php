@@ -21,7 +21,8 @@
                             <span class="font-light text-gray-600">{{ $post->created_at->format('Y/m/d H:i') }}</span>
                         </div>
                         <div class="mt-2">
-                            <a href="{{ route('posts.show',['post' => $post->id]) }}" class="text-2xl font-bold text-gray-700 hover:underline">
+                            {{-- 컨트롤러에서 post라는 모델객체를 매개변수로받기때문에 id가 아닌 post자체를 넘겨줌 --}}
+                            <a href="{{ route('posts.show',['post' => $post]) }}" class="text-2xl font-bold text-gray-700 hover:underline">
                                 {{ $post->title }}
                             </a>
                             <p class="truncate mt-2 text-gray-600">

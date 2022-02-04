@@ -114,7 +114,7 @@
     modify.className = "-mt-2 text-md font-bold text-white bg-indigo-700 rounded-full px-5 py-2 hover:bg-indigo-900";
     modify.setAttribute('onclick','update();');
   };
-  //submit시기는 함수
+  //submit시키는 함수
   function update(){
     var modify = document.getElementById('modify');
     modify.setAttribute('type','submit');
