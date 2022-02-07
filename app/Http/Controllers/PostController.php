@@ -23,7 +23,11 @@ class PostController extends Controller
         //최근에 올라온 게시물 순으로 5개씩 가져오기
         $post = Post::orderby('created_at', 'desc')->paginate(5);
 
-        return view('main',['posts' => $post]);
+        //검색했는지 keyword변수의 유무로 판단하기에 null값을 넘겨줘서 구분
+        return view('main',[
+            'posts' => $post,
+            'keyword' => null
+        ]);
     }
 
     /**
@@ -164,5 +168,17 @@ class PostController extends Controller
             @header('Content-type: text/html; charset=utf-8');
             echo $result;
         }
+    }
+
+    public function search(Request $request){
+        //검색 키워드로 scout을 활용하여 검색
+        $keyword = $request->search;
+        $post = Post::search($keyword)->paginate(5);
+
+        //검색결과와 검색 키워드를 넘긴다 사실상 검색했는지에 대한 확인용 변수 느낌
+        return view('main',[
+            'posts' => $post,
+            'keyword' => $keyword
+        ]);
     }
 }

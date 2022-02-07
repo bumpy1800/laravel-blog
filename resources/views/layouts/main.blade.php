@@ -24,7 +24,7 @@
         @endif
 
         @hasSection('post_create_content')
-        @yield('post_create_content')
+            @yield('post_create_content')
         @endif
         {{-- 중앙 컨텐츠 : end --}}
 

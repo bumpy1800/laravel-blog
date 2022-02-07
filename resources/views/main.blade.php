@@ -5,9 +5,12 @@
   <div class="px-6 py-8">
       <div class="container flex justify-between mx-auto">
           <div class="w-full lg:w-8/12">
-              <div class="flex items-center justify-between">
-                  <h1 class="text-xl font-bold text-gray-700 md:text-2xl">전체글</h1>
-              </div>
+            {{-- 검색을 했을시와 안했을시로 구분하고 검색했을시 URL에서 변수값을 가져와서 무엇을 검색했는지 알려줌 --}}
+            @if ($keyword)
+                <h1 class="text-xl font-bold text-gray-700 md:text-2xl">"<?=$_GET['search']?>"에 대한 검색 결과</h1>
+            @else
+                <h1 class="text-xl font-bold text-gray-700 md:text-2xl">전체글</h1>
+            @endif
               @foreach ($posts as $post)
                 @php
                 //태그가 포함되어서 저장되기때문에 출력할땐 태그 삭제(사진이 리스트에서 안보이는 효과도 줌)
@@ -36,7 +39,14 @@
                     </div>
                 </div>
               @endforeach
-              {{ $posts->links() }}
+                {{-- 페이지를 넘길때 URL에 검색 키워드도 같이 넘겨서 상단에 검색키워드를 계속 노출시킨다 --}}
+              @if ($keyword)
+                {{ $posts->appends(['search' => $_GET['search']])->links() }}  
+              @else
+              {{-- 검색을 안했을시 --}}
+                {{ $posts->links() }}
+              @endif
+
           </div>
       </div>
   </div>
