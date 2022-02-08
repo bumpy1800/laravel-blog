@@ -21,5 +21,9 @@ class Post extends Authenticatable
         'content',
         'photo_path',
     ];
+    public function comment()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
 
 }

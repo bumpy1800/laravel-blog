@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 /*
@@ -67,6 +68,13 @@ Route::post('/updatePassword', [UserController::class, 'updatePassword'])->name(
 Route::resource('/posts', PostController::class);
 Route::post('/uploads', [PostController::class, 'uploadImage'])->name('posts.upload'); //ckeditor 이미지업로드
 Route::get('/search', [PostController::class, 'search'])->name('posts.search');
+
+//댓글 대댓글 관련 라우팅
+Route::middleware(['auth', 'verified'])->name('comment.')->prefix('comment')->group(function () {
+    Route::post('/', [CommentController::class, 'store'])->name('store');
+    Route::PATCH('/{comment}', [CommentController::class, 'update'])->name('update');
+    Route::delete('/{comment}/delete', [CommentController::class, 'delete'])->name('delete');
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

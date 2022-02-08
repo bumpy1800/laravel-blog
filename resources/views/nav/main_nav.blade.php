@@ -59,5 +59,3 @@
 @endif
 </ul>
 
-  {{-- tailwind dropdown 이나 modal같은 기능작용 --}}
-<script src="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/flowbite.bundle.js"></script>

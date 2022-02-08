@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -20,9 +22,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        //최근에 올라온 게시물 순으로 5개씩 가져오기
+        // DB::enableQueryLog();
+        // //최근에 올라온 게시물 순으로 5개씩 가져오기
+        // $post = Post::join('comment', 'post.id', '=', 'comment.post_id')
+        //             ->select('post.*')
+        //             ->orderby('created_at', 'desc')
+        //             ->paginate(5);
+        // dd(DB::getQueryLog());
         $post = Post::orderby('created_at', 'desc')->paginate(5);
-
         //검색했는지 keyword변수의 유무로 판단하기에 null값을 넘겨줘서 구분
         return view('main',[
             'posts' => $post,
@@ -77,8 +84,12 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $comment = Comment::where('post_id', $post->id)->get();
         //post 모델객체 자체를 매개변수로 받기때문에 db에서 값을 가져올 필요가없음
-        return view('posts.post_detail',['posts' => $post]);
+        return view('posts.post_detail',[
+            'posts' => $post,
+            'comments' => $comment,
+        ]);
     }
 
     /**

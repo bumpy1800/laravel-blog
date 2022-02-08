@@ -4,4 +4,6 @@
       <p class="mt-2 md:mt-0">All rights reserved 2022.</p>
       <div class="flex w-1/6 mt-4 mb-2 -mx-2 md:mt-0 md:mb-0"></div>
   </div>
+    {{-- tailwind dropdown 이나 modal같은 기능작용 --}}
+<script src="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/flowbite.bundle.js"></script>
 </footer>
