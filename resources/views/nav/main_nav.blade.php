@@ -27,6 +27,7 @@
 </form>
 <ul class="flex items-center">
 {{-- 로그인 여부에 따라 navbar가 달라짐 --}}
+<!-- Dropdown menu -->
 @if (Auth::check())
 <li>
   <button id="dropdownButton" data-dropdown-toggle="dropdown" class="text-white mr-4 bg-gray-800 hover:bg-gray-700 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
@@ -36,7 +37,7 @@
     </svg>
   </button>
 </li>
-<!-- Dropdown menu -->
+
 <div id="dropdown" class="hidden z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
     <ul class="py-1" aria-labelledby="dropdownButton">
       <li>

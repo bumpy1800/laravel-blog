@@ -21,12 +21,12 @@
         </div>
       </div>
       @if (Auth::check() && $posts->writer == Auth::user()->name)
-      <form action="{{ route('posts.destroy',['post' => $posts]) }}" method="post" class="w-9/12 mb-8" id="del">
+      <form action="{{ route('posts.destroy',['post' => $posts]) }}" method="post" class="w-9/12 mb-8" id="post_del">
         @csrf
         @method('DELETE')
           <a href="{{ route('posts.edit',['post' => $posts]) }}" 
             class="-mt-2 mr-3 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">수정하기</a>
-          <a onclick="del();" href='#'
+          <a onclick="del('post_del');" href='#'
             class="-mt-2 mr-3 text-md font-bold text-white bg-gray-700 rounded-full px-5 py-2 hover:bg-gray-800">삭제하기</a>
       </form>
       @endif
@@ -35,7 +35,7 @@
       <div class="flex flex-col w-9/12 mb-10 text-left">
         <form action="{{ route('comment.store') }}" method="post" class="w-full max-w-xl bg-white rounded-lg px-4 pt-2">
           @csrf
-          <input type="hidden" name="post_id" value="{{ $posts->id }}">
+          <input type="hidden" value="{{ $posts->id }}" name="post_id">
           <div class="flex flex-wrap -mx-3 mb-6">
               <h1 class="mb-6 text-xl font-semibold text-black">새 댓글 달기</h2>
               <div class="w-full md:w-full mb-2 mt-2">
@@ -63,10 +63,33 @@
                   <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10" src="{{ asset('storage\default_profile.jpg') }}" alt="">
                 </div>
                 <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
-                  <strong>{{ $comment->writer }}</strong> <span class="text-xs text-gray-400">{{ $comment->created_at->format('Y/m/d H:i') }}</span>
-                  <p class="text-sm">
-                    {{ $comment->content }}
-                  </p>
+                    <div class="relative mb-1">
+                      <strong>{{ $comment->writer }}</strong> <span class="text-xs text-gray-400">{{ $comment->created_at->format('Y/m/d H:i') }}</span>
+                      @auth
+                      {{-- 드롭다운 id에 댓글 id를 추가함으로써 각자 다른 드롭다운으로 적용시킨다 --}}
+                        <button id="dropdownButton_comment_{{ $comment->id }}" data-dropdown-toggle="dropdown_comment_{{ $comment->id }}" 
+                        class="text-gray-600 absolute right-0 mr-4 hover:bg-gray-100 font-medium rounded-full text-sm px-4 py-2.5 text-center inline-flex items-center" 
+                        type="button"><i class="fas fa-ellipsis-v"></i></button>
+                      <form action="{{ route('comment.delete',['comment' => $comment]) }}" method="post" id="comment_del_{{ $comment->id }}">
+                        @csrf
+                        @method('DELETE')
+                          <div id="dropdown_comment_{{ $comment->id }}" class="hidden z-10 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
+                            <ul class="py-1 px-1" aria-labelledby="dropdownButton_comment_{{ $comment->id }}">
+                              <li>
+                                <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">수정</a>
+                              </li>
+                              <li>
+                                <a onclick="del('comment_del_{{ $comment->id }}');" 
+                                href='javascript://' class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" >삭제</a>
+                              </li>
+                            </ul>
+                          </div>
+                      </form>
+                      @endauth
+                    <p class="text-sm">
+                      {{ $comment->content }}
+                    </p>
+                  </div>
                   <div class="mt-4 flex items-center">
                     <div class="text-sm text-gray-500 font-semibold">
                       <p class="hover:underline text-blue-500">
@@ -110,10 +133,11 @@
 
   <script>
     //confirm창으로 게시글 삭제여부 파악
-    function del(){
+    //게시물 삭제랑 댓글삭제 각자 다른 form에서 submit할수있도록 form id를 매개변수로 받음
+    function del(id){
       var con_test = confirm('정말 삭제하시겠습니까?');
       if(con_test == true){
-        document.getElementById('del').submit();
+        document.getElementById(id).submit();
       }
       else if(con_test == false){
         return;

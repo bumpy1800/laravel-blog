@@ -73,7 +73,7 @@ Route::get('/search', [PostController::class, 'search'])->name('posts.search');
 Route::middleware(['auth', 'verified'])->name('comment.')->prefix('comment')->group(function () {
     Route::post('/', [CommentController::class, 'store'])->name('store');
     Route::PATCH('/{comment}', [CommentController::class, 'update'])->name('update');
-    Route::delete('/{comment}/delete', [CommentController::class, 'delete'])->name('delete');
+    Route::delete('/{comment}/destroy', [CommentController::class, 'destroy'])->name('delete');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

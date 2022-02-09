@@ -22,9 +22,6 @@ class CommentController extends Controller
             'content' => 'required|max:100',
         ]);
 
-        //다시 게시글로 넘어가기위해 post파사드로 게시물 db정보를 가져옴
-        $post = Post::find($request->input('post_id'));
-
         //엘로퀀트ORM이용해서 insert
         $comment = Comment::create([
             'content' => $validatedData['content'],
@@ -33,7 +30,7 @@ class CommentController extends Controller
             'comment_id' => null,
         ]);
         if(!is_null($comment)){
-            return redirect()->route('posts.show',['post' => $post])->with('status', '댓글이 등록되었습니다.');
+            return redirect()->back()->with('status', '댓글이 등록되었습니다.');
         }
         else{
             return redirect()->back()->with('status', '댓글 등록에 실패했습니다.');
@@ -60,6 +57,13 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+
+        if(!is_null($comment)){
+            return redirect()->back()->with('status', '댓글이 삭제되었습니다');
+        }
+        else{
+            return redirect()->back()->with('status', '댓글 삭제에 실패했습니다');
+        }
     }
 }
