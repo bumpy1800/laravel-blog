@@ -65,7 +65,7 @@
                 <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
                     <div class="relative mb-1">
                       <strong>{{ $comment->writer }}</strong> <span class="text-xs text-gray-400">{{ $comment->created_at->format('Y/m/d H:i') }}</span>
-                      @auth
+                      @if (Auth::check() && $posts->writer == Auth::user()->name)
                       {{-- 드롭다운 id에 댓글 id를 추가함으로써 각자 다른 드롭다운으로 적용시킨다 --}}
                         <button id="dropdownButton_comment_{{ $comment->id }}" data-dropdown-toggle="dropdown_comment_{{ $comment->id }}" 
                         class="text-gray-600 absolute right-0 mr-4 hover:bg-gray-100 font-medium rounded-full text-sm px-4 py-2.5 text-center inline-flex items-center" 
@@ -76,7 +76,8 @@
                           <div id="dropdown_comment_{{ $comment->id }}" class="hidden z-10 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
                             <ul class="py-1 px-1" aria-labelledby="dropdownButton_comment_{{ $comment->id }}">
                               <li>
-                                <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">수정</a>
+                                <a onclick="edit({{ $comment->id }})" 
+                                href="javascript://" class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">수정</a>
                               </li>
                               <li>
                                 <a onclick="del('comment_del_{{ $comment->id }}');" 
@@ -85,9 +86,19 @@
                             </ul>
                           </div>
                       </form>
-                      @endauth
+                      @endif
                     <p class="text-sm">
-                      {{ $comment->content }}
+                      <form action="{{ route('comment.update',['comment' => $comment]) }}" method="post" id="">
+                        @csrf
+                        @method('PACTH')
+                        <div class="relative z-0 mb-6 w-full group">
+                          <p class="" id="comment_{{ $comment->id }}">{{ $comment->content }}</p>
+                          <span name="comment_content" id="comment_content_{{ $comment->id }}" class="hidden flex">
+                            <input type="text" value="{{ $comment->content }}" class="block py-2.5 px-0 w-10/12 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                            <button type="submit"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
+                          </span>
+                        </div>
+                      </form>
                     </p>
                   </div>
                   <div class="mt-4 flex items-center">
@@ -142,6 +153,11 @@
       else if(con_test == false){
         return;
       }
+    }
+    //수정버튼을 누른 댓글이 input이 활성화되도록 id를 매개변수로 받음
+    function edit(id){
+      document.getElementById('comment_'+id).classList.add('hidden');
+      document.getElementById('comment_content_'+id).classList.remove('hidden');
     }
   </script>
 @endsection
