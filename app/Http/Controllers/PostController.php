@@ -141,7 +141,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $comment = Comment::where('post_id',$post->id);
         $posts = Post::find($post->id);
+        
+        $comment->delete();
         $posts->delete();
 
         if(!is_null($posts)){

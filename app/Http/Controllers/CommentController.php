@@ -46,7 +46,24 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        //
+        //유효성 검사
+        $validatedData = $request->validate([
+            'comment_content' => 'required|max:100',
+        ]);
+
+        //update
+        $comments = Comment::find($comment->id);
+
+        $comments->content = $validatedData['comment_content'];
+
+        $comments->save();
+
+        if(!is_null($comments)){
+            return redirect()->back()->with('status', '댓글이 수정되었습니다.');
+        }
+        else{
+            return redirect()->back()->with('status', '댓글 수정에 실패했습니다.');
+        }
     }
 
     /**

@@ -23,7 +23,7 @@ class Post extends Authenticatable
     ];
     public function comment()
     {
-        return $this->hasMany('App\Models\Comment');
+        return $this->hasMany('App\Models\Comment','post_id');
     }
 
 }

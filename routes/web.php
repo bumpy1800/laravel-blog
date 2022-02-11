@@ -72,7 +72,7 @@ Route::get('/search', [PostController::class, 'search'])->name('posts.search');
 //댓글 대댓글 관련 라우팅
 Route::middleware(['auth', 'verified'])->name('comment.')->prefix('comment')->group(function () {
     Route::post('/', [CommentController::class, 'store'])->name('store');
-    Route::PATCH('/{comment}', [CommentController::class, 'update'])->name('update');
+    Route::patch('/{comment}', [CommentController::class, 'update'])->name('update');
     Route::delete('/{comment}/destroy', [CommentController::class, 'destroy'])->name('delete');
 });
 
