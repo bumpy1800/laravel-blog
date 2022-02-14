@@ -22,13 +22,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        // DB::enableQueryLog();
         // //최근에 올라온 게시물 순으로 5개씩 가져오기
-        // $post = Post::join('comment', 'post.id', '=', 'comment.post_id')
-        //             ->select('post.*')
-        //             ->orderby('created_at', 'desc')
-        //             ->paginate(5);
-        // dd(DB::getQueryLog());
         $post = Post::orderby('created_at', 'desc')->paginate(5);
         //검색했는지 keyword변수의 유무로 판단하기에 null값을 넘겨줘서 구분
         return view('main',[
@@ -89,6 +83,7 @@ class PostController extends Controller
         return view('posts.post_detail',[
             'posts' => $post,
             'comments' => $comment,
+            'replys' => null
         ]);
     }
 

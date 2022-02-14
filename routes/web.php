@@ -69,11 +69,19 @@ Route::resource('/posts', PostController::class);
 Route::post('/uploads', [PostController::class, 'uploadImage'])->name('posts.upload'); //ckeditor 이미지업로드
 Route::get('/search', [PostController::class, 'search'])->name('posts.search');
 
-//댓글 대댓글 관련 라우팅
+//댓글 관련 라우팅
 Route::middleware(['auth', 'verified'])->name('comment.')->prefix('comment')->group(function () {
     Route::post('/', [CommentController::class, 'store'])->name('store');
     Route::patch('/{comment}', [CommentController::class, 'update'])->name('update');
     Route::delete('/{comment}/destroy', [CommentController::class, 'destroy'])->name('delete');
+});
+
+//대댓글 관련 라우팅
+Route::middleware(['auth', 'verified'])->name('reply.')->prefix('reply')->group(function () {
+    Route::get('/', [CommentController::class, 'reply_index'])->name('index');
+    Route::post('/', [CommentController::class, 'reply_store'])->name('store');
+    Route::patch('/{comment}', [CommentController::class, 'reply_update'])->name('update');
+    Route::delete('/{comment}/destroy', [CommentController::class, 'reply_destroy'])->name('delete');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

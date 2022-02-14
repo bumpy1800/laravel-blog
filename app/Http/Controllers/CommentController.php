@@ -83,4 +83,27 @@ class CommentController extends Controller
             return redirect()->back()->with('status', '댓글 삭제에 실패했습니다');
         }
     }
+
+    public function reply_index(Comment $comment){
+
+
+        if(!is_null($replys)){
+            return redirect()->back();
+        }
+        else{
+            return redirect()->back()->with('status', '댓글 작성에 실패했습니다');
+        }
+    }
+
+    public function reply_store(Request $request){
+
+    }
+
+    public function reply_update(Request $request, Comment $comment){
+
+    }
+
+    public function reply_destroy(Comment $comment){
+
+    }
 }
