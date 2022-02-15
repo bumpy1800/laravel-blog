@@ -97,6 +97,25 @@ class CommentController extends Controller
 
     public function reply_store(Request $request){
 
+        //유효성 검사
+        $validatedData = $request->validate([
+            'reply_content' => 'required|max:100',
+        ]);
+
+        //엘로퀀트ORM이용해서 insert
+        $replys = Comment::create([
+            'content' => $validatedData['reply_content'],
+            'writer' => Auth::user()->name,
+            'post_id' => $request->input('post_id'),
+            'comment_id' => $request->input('comment_id'),
+        ]);
+
+        if(!is_null($replys)){
+            return response()->json();
+        }
+        else{
+            return redirect()->back()->with('status', '댓글 작성에 실패했습니다');
+        }
     }
 
     public function reply_update(Request $request, Comment $comment){

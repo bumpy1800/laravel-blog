@@ -35,7 +35,7 @@
       <div class="flex flex-col w-9/12 mb-10 text-left">
         <form action="{{ route('comment.store') }}" method="post" class="w-full max-w-xl bg-white rounded-lg px-4 pt-2">
           @csrf
-          <input type="hidden" value="{{ $posts->id }}" name="post_id">
+          <input type="hidden" value="{{ $posts->id }}" name="post_id" id="post_id">
           <div class="flex flex-wrap -mx-3 mb-6">
               <h1 class="mb-6 text-xl font-semibold text-black">새 댓글 달기</h2>
               <div class="w-full md:w-full mb-2 mt-2">
@@ -110,14 +110,17 @@
                   </div>
                   <div class="mt-4 flex items-center">
                     <div class="text-sm text-gray-500 font-semibold w-full">
-                      <p class="hover:underline mb-1" id="reply_{{ $comment->id }}">
+                      <p class="hover:underline mb-1 w-1/10" id="reply_{{ $comment->id }}">
                         <a href="javascript:reply_edit({{ $comment->id }})"><i class="fas fa-comment-dots"></i> 답글</a>
                       </p>
+                      {{-- 대댓글 입력 : start --}}
                       <span name="reply_content" id="reply_content_{{ $comment->id }}" class="hidden flex">
-                        <input type="text" name="reply_content" value="" class="block py-2.5 px-0 w-10/12 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                        <input type="text" id="reply_content" name="reply_content_{{ $comment->id }}" value="" class="block py-2.5 px-0 w-10/12 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
                         <button type="button" onclick="reply_edit_cancel({{ $comment->id }})"><i class="fas fa-times"></i></button>
-                        <button type="button" class="ml-2"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
+                        <button type="button" class="ml-2" id="reply_create"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
+                        <input type="hidden" value="{{ $comment->id }}" name="comment_id" id="comment_id">
                       </span>
+                      {{-- 대댓글 입력 : end --}}
                       @if ($replys)
                       <p class="hover:underline text-blue-500">
                         <a href="javascript://"><i class="fas fa-chevron-right"></i> 5개의 댓글</a>
@@ -149,7 +152,6 @@
                           </div>
                         @endforeach
                       @endif
-
                     </div>
                   </div>
                 </div>
@@ -174,6 +176,7 @@
         return;
       }
     }
+
     //수정버튼을 누른 댓글이 input이 활성화되도록 id를 매개변수로 받음
     function edit(id){
       document.getElementById('comment_'+id).classList.add('hidden');
@@ -183,6 +186,7 @@
       document.getElementById('reply_'+id).classList.add('hidden');
       document.getElementById('reply_content_'+id).classList.remove('hidden');
     }
+
     //수정취소
     function edit_cancel(id){
       document.getElementById('comment_'+id).classList.remove('hidden');
@@ -192,5 +196,28 @@
       document.getElementById('reply_'+id).classList.remove('hidden');
       document.getElementById('reply_content_'+id).classList.add('hidden');
     }
+
+    //대댓글 작성 ajax
+    $('#reply_create').on('click',function()
+    {
+      $.ajax({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        type: 'post',
+        url: "{{ route('reply.store') }}",
+        dataType: 'json',
+        data: { 
+          "reply_content" : $(this).prevAll('#reply_content').val(),
+          "post_id" : $('#post_id').val(),
+          "comment_id" : $(this).nextAll('#comment_id').val()
+          },
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(data) {
+            console.log(data);
+            alert("대댓글 작성에 실패했습니다");
+        }
+      });
+    });
   </script>
 @endsection
