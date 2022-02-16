@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Reply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,7 +28,6 @@ class CommentController extends Controller
             'content' => $validatedData['content'],
             'writer' => Auth::user()->name,
             'post_id' => $request->input('post_id'),
-            'comment_id' => null,
         ]);
         if(!is_null($comment)){
             return redirect()->back()->with('status', '댓글이 등록되었습니다.');
@@ -96,22 +96,19 @@ class CommentController extends Controller
     }
 
     public function reply_store(Request $request){
-
         //유효성 검사
         $validatedData = $request->validate([
             'reply_content' => 'required|max:100',
         ]);
 
         //엘로퀀트ORM이용해서 insert
-        $replys = Comment::create([
+        $replys = Reply::create([
             'content' => $validatedData['reply_content'],
-            'writer' => Auth::user()->name,
-            'post_id' => $request->input('post_id'),
             'comment_id' => $request->input('comment_id'),
         ]);
 
         if(!is_null($replys)){
-            return response()->json();
+            return response()->json(array('msg'=> $replys), 200);
         }
         else{
             return redirect()->back()->with('status', '댓글 작성에 실패했습니다');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Reply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -83,7 +84,6 @@ class PostController extends Controller
         return view('posts.post_detail',[
             'posts' => $post,
             'comments' => $comment,
-            'replys' => null
         ]);
     }
 

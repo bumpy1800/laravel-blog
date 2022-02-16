@@ -16,11 +16,15 @@ class Comment extends Model
         'content',
         'writer',
         'post_id',
-        'comment_id',
     ];
 
     public function post()
     {
         return $this->belongsTo('App\Models\Post','id');
+    }
+
+    public function reply()
+    {
+        return $this->hasMany('App\Models\Reply','comment_id');
     }
 }

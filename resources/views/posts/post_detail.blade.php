@@ -121,11 +121,10 @@
                         <input type="hidden" value="{{ $comment->id }}" name="comment_id" id="comment_id">
                       </span>
                       {{-- 대댓글 입력 : end --}}
-                      @if ($replys)
+                     
                       <p class="hover:underline text-blue-500">
                         <a href="javascript://"><i class="fas fa-chevron-right"></i> 5개의 댓글</a>
                       </p>
-                        @foreach ($replys as $reply)
                           <div class="space-y-2">
                             <div class="flex">
                               <div class="flex-shrink-0 mr-3">
@@ -150,8 +149,7 @@
                               </div>
                             </div>
                           </div>
-                        @endforeach
-                      @endif
+                      
                     </div>
                   </div>
                 </div>
@@ -212,6 +210,7 @@
           },
         success: function(data) {
             console.log(data);
+            //html태그 체인지
         },
         error: function(data) {
             console.log(data);
