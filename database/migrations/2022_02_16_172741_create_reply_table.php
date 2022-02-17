@@ -13,9 +13,11 @@ class CreateReplyTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('reply');
         Schema::create('reply', function (Blueprint $table) {
             $table->id();
             $table->string('content');// 내용
+            $table->string('writer'); // 작성자
             $table->string('comment_id');// 어느 댓글의 대댓글인지
             $table->timestamps();
         });

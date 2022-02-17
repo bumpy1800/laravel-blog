@@ -13,7 +13,7 @@ class CreateCommentTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('comment');
+        //Schema::dropIfExists('comment');
         Schema::create('comment', function (Blueprint $table) {
             $table->id(); // 댓글 인덱스
             $table->string('content'); // 내용

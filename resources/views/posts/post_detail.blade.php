@@ -115,41 +115,37 @@
                       </p>
                       {{-- 대댓글 입력 : start --}}
                       <span name="reply_content" id="reply_content_{{ $comment->id }}" class="hidden flex">
-                        <input type="text" id="reply_content" name="reply_content_{{ $comment->id }}" value="" class="block py-2.5 px-0 w-10/12 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
+                        <input type="text" id="reply_content_{{ $comment->id }}" name="reply_content_{{ $comment->id }}" value="" class="block py-2.5 px-0 w-10/12 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
                         <button type="button" onclick="reply_edit_cancel({{ $comment->id }})"><i class="fas fa-times"></i></button>
-                        <button type="button" class="ml-2" id="reply_create"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
+                        <button type="button" class="ml-2" id="reply_create" onclick="reply_create({{ $comment->id }})"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
                         <input type="hidden" value="{{ $comment->id }}" name="comment_id" id="comment_id">
                       </span>
                       {{-- 대댓글 입력 : end --}}
-                     
-                      <p class="hover:underline text-blue-500">
-                        <a href="javascript://"><i class="fas fa-chevron-right"></i> 5개의 댓글</a>
-                      </p>
-                          <div class="space-y-2">
-                            <div class="flex">
-                              <div class="flex-shrink-0 mr-3">
-                                <img class="mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8" src="{{ asset('storage\default_profile.jpg') }}" alt="">
-                              </div>
-                              <div class="flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed mt-4">
-                                <strong>작성자</strong> <span class="text-xs text-gray-400">작성 시간</span>
-                                <p class="text-sm sm:text-sm">
-                                대댓글 내용
-                                </p>
-                              </div>
+                      @php
+                        $reply_count = App\Models\Comment::find($comment->id)->reply()->count();
+                        $replys = App\Models\Comment::find($comment->id)->reply()->get();
+                      @endphp
+
+                      @if ($reply_count > 0)  
+                        <p class="hover:underline text-blue-500" id="reply_count_{{ $comment->id }}">
+                          <a href="javascript:reply_list({{ $comment->id }})"><i class="fas fa-chevron-right"></i> {{ $reply_count }}개의 답글</a>
+                        </p>
+                      @endif
+                      <div class='space-y-2'>
+                        @foreach ($replys as $reply)
+                          <div class='flex'>
+                            <div class='flex-shrink-0 mr-3'>
+                              <img class='mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8' src="{{ asset('storage\default_profile.jpg') }}" alt=''>
                             </div>
-                            <div class="flex">
-                              <div class="flex-shrink-0 mr-3">
-                                <img class="mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8" src="{{ asset('storage\default_profile.jpg') }}" alt="">
-                              </div>
-                              <div class="flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed mt-4">
-                                <strong>작성자</strong> <span class="text-xs text-gray-400">작성 시간</span>
-                                <p class="text-xs sm:text-sm">
-                                대댓글 내용
-                                </p>
-                              </div>
+                            <div class='flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed mt-4'>
+                              <strong>{{ $reply->writer }}</strong> <span class='text-xs text-gray-400'>{{ $reply->created_at }}</span>
+                              <p class='text-sm sm:text-sm'>
+                              {{ $reply->content }}
+                              </p>
                             </div>
                           </div>
-                      
+                        @endforeach
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -196,17 +192,16 @@
     }
 
     //대댓글 작성 ajax
-    $('#reply_create').on('click',function()
-    {
+    function reply_create(id){
+      var content = $('input[name=reply_content_'+id+']');
       $.ajax({
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         type: 'post',
         url: "{{ route('reply.store') }}",
         dataType: 'json',
         data: { 
-          "reply_content" : $(this).prevAll('#reply_content').val(),
-          "post_id" : $('#post_id').val(),
-          "comment_id" : $(this).nextAll('#comment_id').val()
+          "reply_content" : content.val(),
+          "comment_id" : id
           },
         success: function(data) {
             console.log(data);
@@ -217,6 +212,44 @@
             alert("대댓글 작성에 실패했습니다");
         }
       });
-    });
+    }
+
+    //대댓글 리스트 ajax
+    function reply_list(id){
+      var html = '';
+      $.ajax({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        type: 'post',
+        url: "{{ route('reply.index') }}",
+        dataType: 'json',
+        data: { 
+          "comment_id" : id
+          },
+        success: function(replys) {
+            console.log(replys);
+        //     {{ $replys }} = replys;
+        // html +="<div class='space-y-2'>";
+        // html +=  "@foreach ($replys as $reply)";
+        // html +=   "<div class='flex'>";
+        // html +=     "<div class='flex-shrink-0 mr-3'>";
+        // html +=       "<img class='mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8' src=\"{{ asset('storage\default_profile.jpg') }}\" alt=''>";
+        // html +=     "</div>";
+        // html +=   "<div class='flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed mt-4'>";
+        // html +=   "<strong>{{ $reply->writer }}</strong> <span class='text-xs text-gray-400'>{{ $reply->created_at }}</span>";
+        // html +=   "<p class='text-sm sm:text-sm'>";
+        // html +=     "{{ $reply->content }}";
+        // html +=   "</p>";
+        // html +=   "</div>";
+        // html +="</div>";
+        // html +="@endforeach";
+        // html +="</div>";
+        // $("#reply_count_"+id).after(html);
+        },
+        error: function(replys) {
+            console.log(replys);
+            alert("대댓글을 불러오는데 실패했습니다");
+        }
+      });
+    }
   </script>
 @endsection

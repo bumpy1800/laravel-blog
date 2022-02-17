@@ -84,14 +84,15 @@ class CommentController extends Controller
         }
     }
 
-    public function reply_index(Comment $comment){
+    public function reply_index($id){
 
+        $replys = Comment::find($id)->reply()->get();
 
         if(!is_null($replys)){
-            return redirect()->back();
+            return response()->json(array('replys'=> $replys), 200);
         }
         else{
-            return redirect()->back()->with('status', '댓글 작성에 실패했습니다');
+            return redirect()->back()->with('status', '대댓글 불러오기에 실패했습니다');
         }
     }
 
@@ -104,6 +105,7 @@ class CommentController extends Controller
         //엘로퀀트ORM이용해서 insert
         $replys = Reply::create([
             'content' => $validatedData['reply_content'],
+            'writer' => Auth::user()->name,
             'comment_id' => $request->input('comment_id'),
         ]);
 
