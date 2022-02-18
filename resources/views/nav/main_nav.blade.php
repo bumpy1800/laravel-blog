@@ -29,6 +29,11 @@
 {{-- 로그인 여부에 따라 navbar가 달라짐 --}}
 <!-- Dropdown menu -->
 @if (Auth::check())
+  @if (!Auth::user()->profile_photo_path)  
+    <img src="{{ asset('storage\default_profile.jpg') }}" class="object-cover w-12 h-12 mr-2 rounded-full" />  
+  @else
+    <img src="{{ asset(Crypt::decryptString(Auth::user()->profile_photo_path)) }}" class="object.-cover w-12 h-12 mr-2 rounded-full" />
+  @endif
 <li>
   <button id="dropdownButton" data-dropdown-toggle="dropdown" class="text-white mr-4 bg-gray-800 hover:bg-gray-700 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
     {{ Auth::user()->name }}
