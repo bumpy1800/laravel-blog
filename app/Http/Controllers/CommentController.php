@@ -84,19 +84,8 @@ class CommentController extends Controller
         }
     }
 
-    public function reply_index($id){
-
-        $replys = Comment::find($id)->reply()->get();
-
-        if(!is_null($replys)){
-            return response()->json(array('replys'=> $replys), 200);
-        }
-        else{
-            return redirect()->back()->with('status', '대댓글 불러오기에 실패했습니다');
-        }
-    }
-
     public function reply_store(Request $request){
+        
         //유효성 검사
         $validatedData = $request->validate([
             'reply_content' => 'required|max:100',
@@ -110,18 +99,35 @@ class CommentController extends Controller
         ]);
 
         if(!is_null($replys)){
-            return response()->json(array('msg'=> $replys), 200);
+            return redirect()->back()->with('status', '대댓글 작성에 성공했습니다');
         }
         else{
-            return redirect()->back()->with('status', '댓글 작성에 실패했습니다');
+            return redirect()->back()->with('status', '대댓글 작성에 실패했습니다');
         }
     }
 
-    public function reply_update(Request $request, Comment $comment){
+    public function reply_update(Request $request){
+        //유효성 검사
+        $validatedData = $request->validate([
+            'reply_content' => 'required|max:100',
+        ]);
 
+        //update
+        $replys = Reply::find($request->input('id'));
+
+        $replys->content = $validatedData['reply_content'];
+
+        $replys->save();
+
+        if(!is_null($replys)){
+            return response()->json(array('reply'=> $replys), 200);
+        }
+        else{
+            return redirect()->back()->with('status', '대댓글 수정에 실패했습니다.');
+        }
     }
 
-    public function reply_destroy(Comment $comment){
+    public function reply_destroy(Reply $reply){
 
     }
 }

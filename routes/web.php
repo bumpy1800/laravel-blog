@@ -78,10 +78,9 @@ Route::middleware(['auth', 'verified'])->name('comment.')->prefix('comment')->gr
 
 //대댓글 관련 라우팅
 Route::middleware(['auth', 'verified'])->name('reply.')->prefix('reply')->group(function () {
-    Route::get('/', [CommentController::class, 'reply_index'])->name('index');
     Route::post('/', [CommentController::class, 'reply_store'])->name('store');
-    Route::patch('/{comment}', [CommentController::class, 'reply_update'])->name('update');
-    Route::delete('/{comment}/destroy', [CommentController::class, 'reply_destroy'])->name('delete');
+    Route::patch('/update', [CommentController::class, 'reply_update'])->name('update');
+    Route::delete('/destroy', [CommentController::class, 'reply_destroy'])->name('delete');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

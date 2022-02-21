@@ -111,37 +111,72 @@
                   <div class="mt-4 flex items-center">
                     <div class="text-sm text-gray-500 font-semibold w-full">
                       <p class="hover:underline mb-1 w-1/10" id="reply_{{ $comment->id }}">
-                        <a href="javascript:reply_edit({{ $comment->id }})"><i class="fas fa-comment-dots"></i> 답글</a>
+                        <a href="javascript:reply_create({{ $comment->id }})"><i class="fas fa-comment-dots"></i> 답글</a>
                       </p>
                       {{-- 대댓글 입력 : start --}}
-                      <span name="reply_content" id="reply_content_{{ $comment->id }}" class="hidden flex">
-                        <input type="text" id="reply_content_{{ $comment->id }}" name="reply_content_{{ $comment->id }}" value="" class="block py-2.5 px-0 w-10/12 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                        <button type="button" onclick="reply_edit_cancel({{ $comment->id }})"><i class="fas fa-times"></i></button>
-                        <button type="button" class="ml-2" id="reply_create" onclick="reply_create({{ $comment->id }})"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
-                        <input type="hidden" value="{{ $comment->id }}" name="comment_id" id="comment_id">
-                      </span>
+                      <form action="{{ route('reply.store') }}" method="post">
+                        @csrf
+                        <span name="reply_content" id="reply_content_{{ $comment->id }}" class="hidden flex">
+                          <input type="text" id="reply_content" name="reply_content" value="" class="block py-2.5 px-0 w-10/12 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                          <button type="button" onclick="reply_create_cancel({{ $comment->id }})"><i class="fas fa-times"></i></button>
+                          <button type="submit" class="ml-2" id="reply_create"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
+                          <input type="hidden" value="{{ $comment->id }}" name="comment_id" id="comment_id">
+                        </span>
+                      </form>
                       {{-- 대댓글 입력 : end --}}
                       @php
-                        $reply_count = App\Models\Comment::find($comment->id)->reply()->count();
                         $replys = App\Models\Comment::find($comment->id)->reply()->get();
                       @endphp
 
-                      @if ($reply_count > 0)  
-                        <p class="hover:underline text-blue-500" id="reply_count_{{ $comment->id }}">
-                          <a href="javascript:reply_list({{ $comment->id }})"><i class="fas fa-chevron-right"></i> {{ $reply_count }}개의 답글</a>
+                      @if ($replys->count() > 0)  
+                        <p class="hover:underline text-blue-500">
+                          <a href="javascript:reply_list({{ $comment->id }})"><i class="fas fa-chevron-right" id="reply_count_{{ $comment->id }}"></i> {{ $replys->count() }}개의 답글</a>
                         </p>
                       @endif
-                      <div class='space-y-2'>
+                      <div class='space-y-2 hidden' id="reply_list_{{ $comment->id }}">
                         @foreach ($replys as $reply)
                           <div class='flex'>
                             <div class='flex-shrink-0 mr-3'>
                               <img class='mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8' src="{{ asset('storage\default_profile.jpg') }}" alt=''>
                             </div>
-                            <div class='flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed mt-4'>
-                              <strong>{{ $reply->writer }}</strong> <span class='text-xs text-gray-400'>{{ $reply->created_at }}</span>
-                              <p class='text-sm sm:text-sm'>
-                              {{ $reply->content }}
+                            <div class='relative flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed mt-4'>
+                              <strong>{{ $reply->writer }}</strong> 
+                              <span class='text-xs text-gray-400'>{{ $reply->created_at->format('Y/m/d H:i') }}
+                                @if ($reply->created_at != $reply->updated_at)
+                                  (수정됨)
+                                @endif
+                              </span>
+                              @if (Auth::check() && $reply->writer == Auth::user()->name)
+                              {{-- 드롭다운 id에 댓글 id를 추가함으로써 각자 다른 드롭다운으로 적용시킨다 --}}
+                                <button id="dropdownButton_reply_{{ $reply->id }}" data-dropdown-toggle="dropdown_reply_{{ $reply->id }}" 
+                                class="text-gray-600 absolute right-0 mr-4 hover:bg-gray-100 font-medium rounded-full text-sm px-4 py-2.5 text-center inline-flex items-center" 
+                                type="button"><i class="fas fa-ellipsis-v"></i>
+                                </button>
+                              <form action="{{ route('reply.delete',['reply' => $reply]) }}" method="post" id="reply_del_{{ $reply->id }}">
+                                @csrf
+                                @method('DELETE')
+                                  <div id="dropdown_reply_{{ $reply->id }}" class="hidden z-10 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
+                                    <ul class="py-1 px-1" aria-labelledby="dropdownButton_reply_{{ $reply->id }}">
+                                      <li>
+                                        <a onclick="reply_edit({{ $reply->id }})" 
+                                        href="javascript://" class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">수정</a>
+                                      </li>
+                                      <li>
+                                        <a onclick="del('reply_del_{{ $reply->id }}');"
+                                        href='javascript://' class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" >삭제</a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                              </form>
+                              @endif
+                              <p class='text-sm sm:text-sm' id="re_reply_{{ $reply->id }}">
+                                {{ $reply->content }}
                               </p>
+                              <span name="reply_content" id="re_reply_content_{{ $reply->id }}" class="hidden flex">
+                                <input type="text" id="reply_edit_content_{{ $reply->id }}" name="reply_edit_content_{{ $reply->id }}" value="{{ $reply->content }}" class="block py-2.5 px-0 w-10/12 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                                <button type="button" onclick="reply_edit_cancel({{ $reply->id }})"><i class="fas fa-times"></i></button>
+                                <button type="button" class="ml-2" onclick="reply_update({{ $reply->id }})"><i class="fas fa-level-down-alt fa-rotate-90"></i></button>
+                              </span>
                             </div>
                           </div>
                         @endforeach
@@ -176,78 +211,69 @@
       document.getElementById('comment_'+id).classList.add('hidden');
       document.getElementById('comment_content_'+id).classList.remove('hidden');
     }
-    function reply_edit(id){
+    //대댓글 작성
+    function reply_create(id){
       document.getElementById('reply_'+id).classList.add('hidden');
       document.getElementById('reply_content_'+id).classList.remove('hidden');
     }
+    //대댓글 수정
+    function reply_edit(id){
+      document.getElementById('re_reply_'+id).classList.add('hidden');
+      document.getElementById('re_reply_content_'+id).classList.remove('hidden');
+    }
 
-    //수정취소
+    //댓글수정취소
     function edit_cancel(id){
       document.getElementById('comment_'+id).classList.remove('hidden');
       document.getElementById('comment_content_'+id).classList.add('hidden');
     }
-    function reply_edit_cancel(id){
+    //대댓글 작성취소
+    function reply_create_cancel(id){
       document.getElementById('reply_'+id).classList.remove('hidden');
       document.getElementById('reply_content_'+id).classList.add('hidden');
     }
+    //대댓글 수정취소
+    function reply_edit_cancel(id){
+      document.getElementById('re_reply_'+id).classList.remove('hidden');
+      document.getElementById('re_reply_content_'+id).classList.add('hidden');
+    }
 
-    //대댓글 작성 ajax
-    function reply_create(id){
-      var content = $('input[name=reply_content_'+id+']');
-      $.ajax({
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        type: 'post',
-        url: "{{ route('reply.store') }}",
-        dataType: 'json',
-        data: { 
-          "reply_content" : content.val(),
-          "comment_id" : id
-          },
-        success: function(data) {
-            console.log(data);
-            //html태그 체인지
-        },
-        error: function(data) {
-            console.log(data);
-            alert("대댓글 작성에 실패했습니다");
+    //대댓글 리스트
+    function reply_list(id){
+      $(function(){
+        if($('#reply_list_'+id).hasClass('hidden')){
+          $('#reply_list_'+id).removeClass('hidden');
+          $('#reply_count_'+id).attr('class','fas fa-chevron-down');
+        }
+        else{
+          $('#reply_list_'+id).addClass('hidden');
+          $('#reply_count_'+id).attr('class','fas fa-chevron-right');
         }
       });
     }
-
-    //대댓글 리스트 ajax
-    function reply_list(id){
-      var html = '';
+    //대댓글 삭제 ajax
+    function reply_update(id){
+      var content = $('input[name=reply_edit_content_'+id+']');
+      var reply_id = id;
       $.ajax({
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        type: 'post',
-        url: "{{ route('reply.index') }}",
+        type: 'PATCH',
+        url: "{{ route('reply.update') }}",
         dataType: 'json',
-        data: { 
-          "comment_id" : id
+        data: {
+          "reply_content" : content.val(),
+          "id" : id,
+          "_method" : "PATCH",
+          "status" : 'some status'
           },
-        success: function(replys) {
-            console.log(replys);
-        //     {{ $replys }} = replys;
-        // html +="<div class='space-y-2'>";
-        // html +=  "@foreach ($replys as $reply)";
-        // html +=   "<div class='flex'>";
-        // html +=     "<div class='flex-shrink-0 mr-3'>";
-        // html +=       "<img class='mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8' src=\"{{ asset('storage\default_profile.jpg') }}\" alt=''>";
-        // html +=     "</div>";
-        // html +=   "<div class='flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed mt-4'>";
-        // html +=   "<strong>{{ $reply->writer }}</strong> <span class='text-xs text-gray-400'>{{ $reply->created_at }}</span>";
-        // html +=   "<p class='text-sm sm:text-sm'>";
-        // html +=     "{{ $reply->content }}";
-        // html +=   "</p>";
-        // html +=   "</div>";
-        // html +="</div>";
-        // html +="@endforeach";
-        // html +="</div>";
-        // $("#reply_count_"+id).after(html);
+        success: function(data) {
+            console.log(data);
+            $("#re_reply_"+reply_id).text(data.reply.content);
+            reply_edit_cancel(reply_id);
         },
-        error: function(replys) {
-            console.log(replys);
-            alert("대댓글을 불러오는데 실패했습니다");
+        error: function(data) {
+            console.log(data);
+            alert("대댓글 수정에 실패했습니다");
         }
       });
     }
