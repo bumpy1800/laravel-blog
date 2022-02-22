@@ -135,7 +135,7 @@
                       @endif
                       <div class='space-y-2 hidden' id="reply_list_{{ $comment->id }}">
                         @foreach ($replys as $reply)
-                          <div class='flex'>
+                          <div class='flex' id="re_reply_one_{{ $reply->id }}">
                             <div class='flex-shrink-0 mr-3'>
                               <img class='mt-3 rounded-full w-6 h-6 sm:w-8 sm:h-8' src="{{ asset('storage\default_profile.jpg') }}" alt=''>
                             </div>
@@ -162,7 +162,7 @@
                                         href="javascript://" class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">수정</a>
                                       </li>
                                       <li>
-                                        <a onclick="del('reply_del_{{ $reply->id }}');"
+                                        <a onclick="reply_delete({{ $reply->id }});"
                                         href='javascript://' class="block py-2 px-4 text-sm text-gray-700 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" >삭제</a>
                                       </li>
                                     </ul>
@@ -251,7 +251,7 @@
         }
       });
     }
-    //대댓글 삭제 ajax
+    //대댓글 수정 ajax
     function reply_update(id){
       var content = $('input[name=reply_edit_content_'+id+']');
       var reply_id = id;
@@ -274,6 +274,30 @@
         error: function(data) {
             console.log(data);
             alert("대댓글 수정에 실패했습니다");
+        }
+      });
+    }
+
+    //대댓글 삭제 ajax
+    function reply_delete(id){
+      var reply_id = id;
+      $.ajax({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        type: 'DELETE',
+        url: "{{ route('reply.delete') }}",
+        dataType: 'json',
+        data: {
+          "id" : id,
+          "_method" : "DELETE",
+          "status" : 'some status'
+          },
+        success: function(data) {
+            console.log(data);
+            $("#re_reply_one_"+reply_id).remove();
+        },
+        error: function(data) {
+            console.log(data);
+            alert("대댓글 삭제에 실패했습니다");
         }
       });
     }

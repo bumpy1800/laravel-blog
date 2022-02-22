@@ -127,7 +127,17 @@ class CommentController extends Controller
         }
     }
 
-    public function reply_destroy(Reply $reply){
+    public function reply_destroy(Request $request){
 
+        $replys = Reply::find($request->input('id'));
+
+        $replys->delete();
+
+        if(!is_null($replys)){
+            return response()->json(array('reply'=> $replys), 200);
+        }
+        else{
+            return redirect()->back()->with('status', '대댓글 수정에 실패했습니다.');
+        }
     }
 }
