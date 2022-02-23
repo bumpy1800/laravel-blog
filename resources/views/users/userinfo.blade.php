@@ -19,7 +19,8 @@
         </script>
     @enderror
     {{-- alert.blade.php 불러와서 성공실패 메시지 출력 --}}
-    @include('layouts.alert')
+    {{-- @include('layouts.alert') --}}
+    <x-alert />
     <div class="border-b-2 block md:flex w-3/5">
       <div class="text-center w-2/6 md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
         <div class="flex justify-between">
