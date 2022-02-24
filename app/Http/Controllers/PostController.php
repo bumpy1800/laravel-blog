@@ -178,12 +178,14 @@ class PostController extends Controller
             echo $result;
         }
     }
-
     public function search(Request $request){
+        if(mb_strlen($request->search) >= 2){
+            return redirect()->back()->with('status', '검색은 2글자 이상이나 반드시 입력해야합니다');
+        }
         //검색 키워드로 scout을 활용하여 검색
         $keyword = $request->search;
         $post = Post::search($keyword)->paginate(5);
-
+        
         //검색결과와 검색 키워드를 넘긴다 사실상 검색했는지에 대한 확인용 변수 느낌
         return view('main',[
             'posts' => $post,
